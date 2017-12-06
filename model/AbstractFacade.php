@@ -238,9 +238,9 @@ class AbstractFacade {
     /**
      * 
      * @param stdClass $params
-     * @values array('select', 'filters', 'orderBy', 'alias', 'joins', 'likeArray')
+     * @values array('select', 'filters', 'orderBy', 'alias', 'joins', 'likeArray', 'singleResult')
      */
-    public function setParams($params = array('select', 'filters', 'orderBy', 'alias', 'joins', 'likeArray')){
+    public function setParams($params = array('select', 'filters', 'orderBy', 'alias', 'joins', 'likeArray', 'singleResult')){
 
         $this->obj = new stdClass();
         
@@ -250,6 +250,7 @@ class AbstractFacade {
         $this->obj->alias = (isset($params['alias'])) ? $params['alias'] : '';
         $this->obj->joins = (isset($params['joins'])) ? $params['joins'] : array(); 
         $this->obj->likeArray = (isset($params['likeArray'])) ? $params['likeArray'] : false;
+        $this->obj->singleResult = (isset($params['singleResult'])) ? $params['singleResult'] : false;
         
         return $this;
         
@@ -257,9 +258,13 @@ class AbstractFacade {
 
     public function findEntities() {
         
+        $singleResult = false;
+        
         if(!is_object($this->obj)){
             $this->setParams();
         }
+        
+        $singleResult = $this->obj->singleResult;
         
         $consulta = "SELECT ";
         //***
@@ -286,6 +291,10 @@ class AbstractFacade {
         // ***
         $entidades = $this->executeQuery($consulta);
         
+        if($singleResult){
+            $entidades = array($entidades[0]);
+        }
+        
         if($this->obj->likeArray){
             
             $this->obj = null;
@@ -304,7 +313,7 @@ class AbstractFacade {
             }
         }
         //***
-        return $lista;
+        return ($singleResult) ? $lista[0] : $lista;
     }
 
     public function findEntityById($id, $select = array()) {

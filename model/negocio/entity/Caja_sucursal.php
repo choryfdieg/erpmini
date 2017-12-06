@@ -9,7 +9,7 @@
 * Description of Caja_sucursal
 *
 * @author chory
-* @date 2017-11-02 15:11:26
+* @date 2017-11-30 17:11:47
 */
 require_once 'model/Entity.php';
 
@@ -27,6 +27,15 @@ class Caja_sucursal extends Entity{
 
    /**
    *
+   * @id id
+   * @autoincrement true
+   * @type int(11)
+   * @length (11)
+   */
+   public $sucursal_id;
+
+   /**
+   *
    * @type varchar(4)
    * @length (4)
    */
@@ -34,17 +43,52 @@ class Caja_sucursal extends Entity{
 
    /**
    *
-   * @type varchar(200)
-   * @length (200)
+   * @type varchar(100)
+   * @length (100)
    */
    public $nombre;
+
+   /**
+   *
+   * @type varchar(45)
+   * @length (45)
+   */
+   public $prefijo;
 
    /**
    *
    * @type int(11)
    * @length (11)
    */
-   public $sucursal_id;
+   public $numero_inicial;
+
+   /**
+   *
+   * @type int(11)
+   * @length (11)
+   */
+   public $numero_final;
+
+   /**
+   *
+   * @type int(11)
+   * @length (11)
+   */
+   public $numero_actual;
+
+   /**
+   *
+   * @type varchar(500)
+   * @length (500)
+   */
+   public $texto_numeracion;
+
+   /**
+   *
+   * @type varchar(500)
+   * @length (500)
+   */
+   public $texto_resolucion;
 
    /**
    *
@@ -89,6 +133,15 @@ class Caja_sucursal extends Entity{
    }
 
 
+   public function setSucursal_id($sucursal_id){
+      $this->sucursal_id = $sucursal_id;
+   }
+
+   public function getSucursal_id(){
+       return $this->sucursal_id;
+   }
+
+
    public function setNumero($numero){
       $this->numero = $numero;
    }
@@ -107,12 +160,57 @@ class Caja_sucursal extends Entity{
    }
 
 
-   public function setSucursal_id($sucursal_id){
-      $this->sucursal_id = $sucursal_id;
+   public function setPrefijo($prefijo){
+      $this->prefijo = $prefijo;
    }
 
-   public function getSucursal_id(){
-       return $this->sucursal_id;
+   public function getPrefijo(){
+       return $this->prefijo;
+   }
+
+
+   public function setNumero_inicial($numero_inicial){
+      $this->numero_inicial = $numero_inicial;
+   }
+
+   public function getNumero_inicial(){
+       return $this->numero_inicial;
+   }
+
+
+   public function setNumero_final($numero_final){
+      $this->numero_final = $numero_final;
+   }
+
+   public function getNumero_final(){
+       return $this->numero_final;
+   }
+
+
+   public function setNumero_actual($numero_actual){
+      $this->numero_actual = $numero_actual;
+   }
+
+   public function getNumero_actual(){
+       return $this->numero_actual;
+   }
+
+
+   public function setTexto_numeracion($texto_numeracion){
+      $this->texto_numeracion = $texto_numeracion;
+   }
+
+   public function getTexto_numeracion(){
+       return $this->texto_numeracion;
+   }
+
+
+   public function setTexto_resolucion($texto_resolucion){
+      $this->texto_resolucion = $texto_resolucion;
+   }
+
+   public function getTexto_resolucion(){
+       return $this->texto_resolucion;
    }
 
 

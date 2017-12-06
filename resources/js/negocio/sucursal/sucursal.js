@@ -18,34 +18,19 @@ $(document).ready(function(){
                 "sNext":     "Siguiente",
                 "sPrevious": "Anterior",
             }
-        }
-    });
-    
-    $('#tableSucursal tbody').on( 'click', 'tr', function () {
-        var data = table.row( this ).data();        
-        $.get(baseUrl + 'api.php/negocio/sucursal/sucursal', {id: data[0]}, 
-        function(response){
-            editarSucursal(response);
-        }).fail(function(){
-        });
-    } );
-    
-    $('#sucursal_modal').on('hide.bs.modal', function () {
-        table.ajax.reload(function(){});
+        },
+        "columnDefs": [
+              {
+            "targets": -1,
+            "data": [0],
+            "render": function(data){ 
+                        return '<a href="index.php/negocio/sucursal/edit/id/' + data + '" class="btn btn-primary btn-xs mr-3"><i class="fa fa-pencil"></i></a>';
+                      }
+              }
+          ]
     });
     
 });
-
-function nuevaSucursal(){
-    
-    var controles = $('#sucursal_form .form-control');
-    
-    $.each(controles, function(i, e){
-        $(e).val('');
-    });
-    
-    $("#sucursal_modal").modal('show');
-}
 
 function guardarSucursal(){
     
@@ -59,21 +44,10 @@ function guardarSucursal(){
             type: type,
             data: $("#sucursal_form").serialize(),
         success: function (response) {
-            $("#sucursal_modal_cerrar_button").click();
+            
+            var data = eval('('+response+')');
+            
+            window.location.assign("index.php/negocio/sucursal/edit/id/"+data.id);
         }
     });
-}
-
-function editarSucursal(data){
-    
-    var obj = eval('('+data+')');
-    
-    var controles = $('#sucursal_form .form-control');
-    
-    $.each(controles, function(i, e){
-        $(e).val(obj[$(e).attr('name')]);
-    });
-    
-    $("#sucursal_modal").modal('show');
-    
 }

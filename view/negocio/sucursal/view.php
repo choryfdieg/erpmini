@@ -1,5 +1,4 @@
-<button type="button" class="btn btn-info btn-circle" onclick="nuevaSucursal()" ><i class="fa fa-plus-circle"></i>
-</button>
+<a class="btn btn-primary pull-right" href="index.php/negocio/sucursal/create" >Nueva sucursal</a>
 
 <div>
    <table id="tableSucursal"  width="100%" class="table table-striped table-bordered table-hover">
@@ -9,6 +8,7 @@
                 <th>Nombre</th>
                 <th>Descripcion</th>
                 <th>Centro de costo</th>
+                <th>Acciones</th>
            </tr>
        </thead>
    </table>

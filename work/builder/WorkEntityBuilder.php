@@ -121,37 +121,37 @@ class WorkEntityBuilder extends AbstractFacade{
         
         $abstractFacade = new AbstractFacade();
 
-//        if($params['motor'] == 'mysql'){
-//            $abstractFacade->setMotor(AbstractFacade::$MYSQL);
-//            $sql = "describe $params[esquema].$params[tabla]";
-//        }
-//
-//        $result = $abstractFacade->executeQuery($sql);
-        
-        
-        foreach ($this->entities as $modulo => $entidades) {
-            
-            foreach ($entidades as $entidad) {
-                $params = array();
-
-                $params['esquema'] = 'erpmini';
-                $params['tabla'] = $entidad;
-
-                $abstractFacade->setMotor(AbstractFacade::$MYSQL);
-                $sql = "describe $params[esquema].$params[tabla]";
-
-                $result = $abstractFacade->executeQuery($sql);
-
-                $this->buildEntity($result, $entidad, $modulo);
-            }
-        
+        if($params['motor'] == 'mysql'){
+            $abstractFacade->setMotor(AbstractFacade::$MYSQL);
+            $sql = "describe $params[esquema].$params[tabla]";
         }
+
+        $result = $abstractFacade->executeQuery($sql);
         
-//        $this->buildEntity($result, $params['tabla'], $params['modulo']);
-//        $this->buildFacade($params['tabla'], $params['modulo']);
-//        $this->buildControl($params['tabla'], $params['modulo']);
-//        $this->buildList($result, $params['tabla'], $params['modulo']);
-//        $this->buildJs($params['tabla'], $params['modulo']);
+        
+//        foreach ($this->entities as $modulo => $entidades) {
+//            
+//            foreach ($entidades as $entidad) {
+//                $params = array();
+//
+//                $params['esquema'] = 'erpmini';
+//                $params['tabla'] = $entidad;
+//
+//                $abstractFacade->setMotor(AbstractFacade::$MYSQL);
+//                $sql = "describe $params[esquema].$params[tabla]";
+//
+//                $result = $abstractFacade->executeQuery($sql);
+//
+//                $this->buildEntity($result, $entidad, $modulo);
+//            }
+//        
+//        }
+        
+        $this->buildEntity($result, $params['tabla'], $params['modulo']);
+        $this->buildFacade($params['tabla'], $params['modulo']);
+        $this->buildControl($params['tabla'], $params['modulo']);
+        $this->buildList($result, $params['tabla'], $params['modulo']);
+        $this->buildJs($params['tabla'], $params['modulo']);
 
         $this->index();
 

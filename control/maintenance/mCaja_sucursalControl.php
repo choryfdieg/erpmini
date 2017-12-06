@@ -7,7 +7,7 @@
  * Description of mCaja_sucursalControl
  *
  * @author chory
-* @date 2017-10-26 17:10:06
+* @date 2017-11-30 17:11:47
  */
 
 require_once 'model/negocio/facade/Caja_sucursalFacade.php';

@@ -43,7 +43,7 @@ $(document).ready(function(){
     });
     
     $(".valor").on('change', function(){
-        uploadSubtotal();
+        verificarTotalFormasPago();
     });
     
 });
@@ -126,7 +126,7 @@ function uploadSubtotal(){
     $("#factura_impuestos").html(impuestos);
     $("#factura_subtotal").html(subtotal);
     $("#factura_descuentos").html(descuentos);
-    $("#factura_total").html(subtotal - descuentos);
+    $("#factura_total").html(subtotal - descuentos);    
 }
 
 function setOptionData(){
@@ -149,9 +149,36 @@ function setOptionData(){
     
 }
 
+function validarFactura(){
+    
+    var validacion = false;
+    
+    var restante = verificarTotalFormasPago();
+    
+    if(restante === 0){
+        validacion = true;
+    }else{
+        bootbox.alert({
+            title: 'Validación del documento',
+            message: '<div class="alert alert-danger"><b>Oh!</b> Todavia restan $' + restante + ' para cubrir el total de la factura. Verifica los valores de las formas de pago.</div>',
+            backdrop: true
+        });
+        
+    }
+    
+    return validacion;
+}
+
 function save(print){
     
     var type = 'post';
+    
+    if(print){
+        if(validarFactura() === false){
+
+            return false;
+        }
+    }
     
     if($("#factura_id").val() !== ''){
         type = 'put';
@@ -164,19 +191,24 @@ function save(print){
             
             var data = eval('('+response+')');
             
-            if(!print){
-                window.location.assign("index.php/ingresos/factura/edit/id/"+data.id);
-            }
+            
         }
     }).done(function (){
         if(print){
             printDocument();
         }
+    }).always(function(response){
+        
+        var data = eval('('+response+')');
+        
+        if(!print){
+            window.location.assign("index.php/ingresos/factura/edit/id/"+data.id);
+        }
     });
 }
 
 function printDocument(){
-    alert('imprimiendo');
+//    alert('imprimiendo');
 }
 
 function loadProductosSelect(){
@@ -414,6 +446,8 @@ function loadFacturaFormaDePagoTable(){
                 
                 var newTr = tr.clone(true);
                 
+                $(newTr).addClass('factura_formas_pago');
+                
                 // *** input item_id
                 var formaId = $(newTr).find('.forma_id').get(0);
                 $(formaId).attr('name', 'factura_forma_pago['+index+'][id]');
@@ -459,7 +493,8 @@ function loadFacturaFormaDePagoTable(){
             
             
         }).always(function(){
-            addItemFacturaFormaDePagoTable();
+            addItemFacturaFormaDePagoTable();            
+            verificarTotalFormasPago();
         }).fail(function(){
         });
 }
@@ -474,6 +509,8 @@ function addItemFacturaFormaDePagoTable(){
     
     var newTr = tr.clone(true);
                 
+    $(newTr).addClass('factura_formas_pago');            
+    
     // *** input forma_id
     var formaId = $(newTr).find('.forma_id').get(0);
     $(formaId).attr('name', 'factura_forma_pago['+index+'][id]');
@@ -506,4 +543,41 @@ function addItemFacturaFormaDePagoTable(){
     $(newTr).show();
 
     $("#factura_forma_pago_table").append(newTr);
+}
+
+function verificarTotalFormasPago(){
+    
+    var total = parseInt($("#factura_total").html());
+    
+    var formasTr = $("#factura_forma_pago_table tbody tr.factura_formas_pago");
+    
+    var totalFormasPago = 0;
+    
+    $.each(formasTr, function(i, e){
+        
+        var valor = 0;
+        
+        if($(e).find('.valor').val() > 0){
+            valor = $(e).find('.valor').val();
+        }
+        
+        totalFormasPago += parseInt(valor);
+        
+    });    
+    
+    var restante = total - totalFormasPago;
+    
+    $("#total_formas_span").html(totalFormasPago);
+    $("#restante_formas_span").html(restante);
+    
+    var alertClass = "text-danger";
+    
+    $("#restante_formas_span").removeClass(alertClass);
+    
+    if(restante < 0){
+        $("#restante_formas_span").addClass(alertClass);
+    }
+    
+    return restante;
+    
 }

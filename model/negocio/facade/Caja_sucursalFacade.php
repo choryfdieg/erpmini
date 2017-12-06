@@ -9,7 +9,7 @@
 * Description of Caja_sucursalFacade
 *
 * @author chory
-* @date 2017-10-26 17:10:06
+* @date 2017-11-30 17:11:47
 */
 include_once('model/AbstractFacade.php');
 require_once 'model/negocio/entity/Caja_sucursal.php';

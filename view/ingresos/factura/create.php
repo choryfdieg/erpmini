@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 col-sm-2 control-label">Fecha de generacion</label>
                     <div class='input-group date col-sm-10 input-date' id='datetimepicker1'>
-                        <input type='text' class="form-control" />
+                        <input type='text' class="form-control" value="<?php echo $factura->fechaGeneracion?>"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -163,7 +163,7 @@
                                 <select class="forma">                        
                                 </select>
                             </td>
-                            <td><input type="number" min="1" value="" class="valor"/></td>
+                            <td><input type="number" min="1" value="" class="valor text-right"/></td>
                             <td><input value="" class="referencia"/></td>
                             <td><input value="" class="voucher_tarjeta"/></td>
                             <td>
@@ -171,6 +171,16 @@
                             </td>
                         </tr>            
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><span class="pull-right text-bold">Total: </span></td>
+                            <td><span id="total_formas_span" class="text-bold"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="pull-right text-bold">Restante: </span></td>
+                            <td><span id="restante_formas_span" class="text-bold"></span></td>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div class="col-sm-6 col-xs-6">
                     <a href="javascript:;" onclick="addItemFacturaFormaDePagoTable()"><i class="fa fa-plus-circle"></i> Agregar forma de pago</a>
@@ -229,7 +239,5 @@
             </div>
         </div>
     </div>
-
-
     
 </form>

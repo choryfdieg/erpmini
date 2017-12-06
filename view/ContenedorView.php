@@ -224,6 +224,7 @@
                           <span>Ingresos</span>
                       </a>
                       <ul class="sub">
+                          <li><a href="index.php/negocio/apertura_caja/create">Abrir caja</a></li>
                           <li><a href="index.php/ingresos/factura/">Factura</a></li>
                           <li><a href="index.php/ingresos/nota/">Nota crédito</a></li>
                           <li><a href="index.php">Abono</a></li>
@@ -327,6 +328,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     
     <script src="resources/js/common_erp_mini.js"></script>
+    
+    <script src="resources/js/bootbox.min.js"></script>
     
   <script>
       //custom select box

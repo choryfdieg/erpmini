@@ -7,3 +7,4 @@
 <script src="resources/js/negocio/unidad_medida/unidad_medida.js"></script>
 <script src="resources/js/negocio/producto/producto.js"></script>
 <script src="resources/js/negocio/producto/tarifa.js"></script>
+<script src='resources/js/negocio/caja_sucursal/caja_sucursal.js'></script>

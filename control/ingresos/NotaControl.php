@@ -68,10 +68,13 @@ class NotaControl {
         $facturaFormasDePagoRequest = $request->factura_forma_pago;
 
         $facturaFacade = new FacturaFacade();
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();
 
         $factura = new Factura();
 
-        $factura->apertura_caja_id = 1;
+        $factura->apertura_caja_id = $apertura_caja->id;
         
         $factura->tipo_factura_id = FacturaFacade::$TIPO_NOTA;
         $factura->a_estado_id = FacturaFacade::$ESTADOACTIVO;

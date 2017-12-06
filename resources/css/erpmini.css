@@ -48,3 +48,16 @@ and open the template in the editor.
 .text-bold{
     font-weight: bold;
 }
+
+.modal-header{
+    background: #1f8bd1 !important;
+    border-bottom: 1px solid #f2f7ff !important;
+}
+
+.pd_l_0{
+    padding-left: 0px !important;
+}
+
+.pd_r_0{
+    padding-right: 0px !important;
+}

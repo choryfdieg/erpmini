@@ -19,6 +19,20 @@ class SucursalControl {
    public function index(){        
        include_once 'view/moduleExample/example/example.php';
    }
+   
+   public function create() {
+        $sucursal = new Sucursal();
+        include_once 'view/negocio/sucursal/create.php';
+    }
+   
+   public function edit($request) {
+
+        $sucursalFacade = new SucursalFacade();
+
+        $sucursal = $sucursalFacade->findById($request->id);
+
+        include_once 'view/negocio/sucursal/create.php';
+    }
 
    public function getSucursals(){
        $sucursalFacade = new SucursalFacade();
@@ -48,6 +62,9 @@ class SucursalControl {
        $sucursal = new Sucursal((array)$request);
        
        $sucursalFacade->doEdit($sucursal);
+       
+       echo json_encode(array('id' => $sucursal->id));
+       
    }
    
    public function putSucursal($request){        
@@ -59,6 +76,8 @@ class SucursalControl {
        $sucursal->merge((array)$request);
        
        $sucursalFacade->doEdit($sucursal);       
+       
+       echo json_encode(array('id' => $sucursal->id));
    }
    
    public function getSucursalsForSelect(){

@@ -18,6 +18,7 @@ require_once 'model/negocio/facade/ProductoFacade.php';
 require_once 'model/negocio/facade/TarifaFacade.php';
 require_once 'model/ingresos/entity/Factura_producto.php';
 require_once 'model/ingresos/entity/Factura.php';
+require_once 'model/negocio/facade/Apertura_cajaFacade.php';
 
 class FacturaControl {
 
@@ -31,14 +32,25 @@ class FacturaControl {
 
     public function create() {
         $factura = new Factura();
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();
+        
+        $factura->fechaGeneracion = $apertura_caja->fecha_apertura;
+        
         include_once 'view/ingresos/factura/create.php';
     }
 
     public function edit($request) {
 
         $facturaFacade = new FacturaFacade();
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();        
 
         $factura = $facturaFacade->findById($request->id);
+        
+        $factura->fechaGeneracion = $apertura_caja->fecha_apertura;
 
         include_once 'view/ingresos/factura/create.php';
     }
@@ -51,18 +63,21 @@ class FacturaControl {
            $entitiesData[] = array_values($entity);
        }
        echo json_encode(array('data' => $entitiesData));       
-   }  
-
+   }
+   
     public function postSave($request) {
 
         $facturaProductoRequest = $request->factura_producto;
         $facturaFormasDePagoRequest = $request->factura_forma_pago;
 
         $facturaFacade = new FacturaFacade();
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();
 
         $factura = new Factura();
 
-        $factura->apertura_caja_id = 1;
+        $factura->apertura_caja_id = $apertura_caja->id;
         
         $factura->tipo_factura_id = FacturaFacade::$TIPO_FACTURA;
         $factura->a_estado_id = FacturaFacade::$ESTADOACTIVO;

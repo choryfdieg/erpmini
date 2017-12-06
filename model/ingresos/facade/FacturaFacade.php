@@ -24,7 +24,7 @@ class FacturaFacade extends AbstractFacade{
         $this->schema = 'erpmini';
         $this->entidad = 'factura';
         $this->idcolum = 'id';
-    }
-
+    }    
+    
 }
 

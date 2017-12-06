@@ -11,3 +11,4 @@
 <script src='resources/js/negocio/numero_factura/numero_factura.js'></script>
 <script src='resources/js/negocio/apertura_caja/apertura_caja.js'></script>
 <script src='resources/js/sistema/estado_caja/estado_caja.js'></script>
+<script src='resources/js/negocio/caja_sucursal/caja_sucursal.js'></script>
