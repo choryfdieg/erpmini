@@ -227,12 +227,18 @@ class ContenedorModel {
     
     public function getJsModulo(){   
         
+        if(file_exists('view/' . $this->modulo . '/scripts.php')){        
+            include 'view/' . $this->modulo . '/scripts.php';
+        }
+        
         if(file_exists('view/' . $this->modulo . '/' . $this->control . '/scripts.php')){        
             include 'view/' . $this->modulo . '/' . $this->control . '/scripts.php';
         }
         
-        if(file_exists('view/' . $this->modulo . '/scripts.php')){        
-            include 'view/' . $this->modulo . '/scripts.php';
+        if(trim($this->accion) !== ''){            
+            if(file_exists('view/' . $this->modulo . '/' . $this->control . '/' . $this->accion . '/scripts.php')){        
+                include 'view/' . $this->modulo . '/' . $this->control . '/' . $this->accion . '/scripts.php';
+            }
         }
         
         return '';

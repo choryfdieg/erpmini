@@ -11,7 +11,7 @@
  */
 class Ambiente {
 
-    public static $SERVIDOR       = "localhost";
+    public static $SERVIDOR       = "10.25.30.95";
     public static $DB             = "erpmini";
     public static $USER           = "root";
     public static $PASS           = "1234";

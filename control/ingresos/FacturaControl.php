@@ -27,7 +27,7 @@ class FacturaControl {
     }
 
     public function index() {
-        include_once 'view/ingresos/factura/view.php';
+        include_once 'view/ingresos/factura/view/view.php';
     }
 
     public function create() {
@@ -38,7 +38,7 @@ class FacturaControl {
         
         $factura->fechaGeneracion = $apertura_caja->fecha_apertura;
         
-        include_once 'view/ingresos/factura/create.php';
+        include_once 'view/ingresos/factura/edit/create.php';
     }
 
     public function edit($request) {
@@ -52,7 +52,7 @@ class FacturaControl {
         
         $factura->fechaGeneracion = $apertura_caja->fecha_apertura;
 
-        include_once 'view/ingresos/factura/create.php';
+        include_once 'view/ingresos/factura/edit/create.php';
     }
     
     public function getFacturas($request){        

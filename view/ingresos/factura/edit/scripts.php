@@ -1,0 +1,1 @@
+<script src="resources/js/ingresos/factura/create.js"></script>
