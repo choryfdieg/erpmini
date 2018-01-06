@@ -64,5 +64,20 @@ class Caja_sucursalControl {
 
         $caja_sucursalFacade->doEdit($caja_sucursal);
     }
+    
+    /**
+     * @api
+     * @method GET
+     */
+    public function getCajaBySucursal($request) {
+        
+        $sucursalId = $request->sucursalId;
+        
+        $caja_sucursalFacade = new Caja_sucursalFacade();
+        
+        $entities = $caja_sucursalFacade->setParams(array('select' => array('id', 'nombre'), 'filters' => array("and sucursal_id = {$sucursalId}")))->findEntities();
+        
+        echo json_encode($entities);
+    }
 
 }

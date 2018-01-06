@@ -61,3 +61,15 @@ and open the template in the editor.
 .pd_r_0{
     padding-right: 0px !important;
 }
+
+.top-30pe{
+    top: 30% !important;
+}
+
+.modal-backdrop{
+    background-color: #2cb19a !important;
+}
+
+.modal-backdrop.fade.in{
+    opacity: 1 !important;
+}

@@ -99,11 +99,16 @@ class FacturaControl {
         $facturaFormasDePagoRequest = (isset($request->factura_forma_pago)) ? $request->factura_forma_pago : array();
 
         $facturaFacade = new FacturaFacade();
-
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();
+        
         $factura = $facturaFacade->findById($facturaRequest->id);
 
         $factura->merge($request->factura);
 
+        $factura->apertura_caja_id = $apertura_caja->id;
+        
         $facturaFacade->doEdit($factura);
 
         $this->saveProductos($factura->id, $facturaProductoRequest);

@@ -12,7 +12,7 @@
     
                 <div class='form-group'>
                         <label>sucursal:</label>
-                        <div class='input-group' id='datetimepicker1'>
+                        <div class='input-group'>
                             <select id="sucursal_select"></select>
                         </div>
                         <p class='help-block'></p>
@@ -21,7 +21,9 @@
                 
                 <div class='form-group'>
                         <label>caja_sucursal_id:</label>
-                        <input class='form-control' name='caja_sucursal_id'>
+                        <div class='input-group'>
+                            <select id="caja_sucursal_select" name="caja_sucursal_id"></select>
+                        </div>
                         <p class='help-block'></p>
                 </div>                                        
                 <div class="form-group">

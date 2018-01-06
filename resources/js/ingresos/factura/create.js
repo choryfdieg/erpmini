@@ -2,6 +2,16 @@ var baseUrl = $('base').attr('href');
 
 $(document).ready(function(){    
     
+    bootbox.dialog({
+            message: '<p><i class="fa fa-spin fa-spinner"></i>   Estamos cargando los datos de la factura...</p>',
+            closeButton: false,
+            className: 'top-30pe'
+        });
+    
+    $(document).ajaxStop(function(){
+        bootbox.hideAll();
+    });
+    
     loadFacturasTable();
     
     $('#datetimepicker1').datetimepicker({locale: 'es', format: 'YYYY/MM/DD'});

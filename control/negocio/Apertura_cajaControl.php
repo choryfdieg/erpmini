@@ -72,5 +72,7 @@ class Apertura_cajaControl {
 
         $apertura_cajaFacade->doEdit($apertura_caja);
     }
+    
+    
 
 }
