@@ -249,5 +249,26 @@ class FacturaControl {
 
         echo json_encode($facturaFormasDePago);
     }
+    
+    public function getImprimirFactura($request){
+        
+        ob_get_clean();
+        
+        $facturaId = $request->factura_id;
+        
+        $facturaFacade = new FacturaFacade();
+        
+        $actualizado = $facturaFacade->actualizarNumeracionFactura($facturaId);
+        
+        $mensaje = '';
+        
+        if($actualizado == false){
+            $mensaje = 'Error. No se pudo actualizar la numeracion de la factura';
+            echo json_encode(array('actualizado' => $actualizado, 'mensaje' => $mensaje));
+            die;
+        }
+        
+        echo json_encode(array('factura' => $facturaFacade->imprimirFactura($facturaId)));
+    }
 
 }

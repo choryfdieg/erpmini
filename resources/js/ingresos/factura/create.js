@@ -133,7 +133,8 @@ function validarFactura(){
         bootbox.alert({
             title: 'Validación del documento',
             message: '<div class="alert alert-danger"><b>Oh!</b> Todavia restan $' + restante + ' para cubrir el total de la factura. Verifica los valores de las formas de pago.</div>',
-            backdrop: true
+            backdrop: true,
+            className: 'top-30pe'
         });
         
     }
@@ -165,7 +166,10 @@ function save(print){
             
             
         }
-    }).done(function (){
+    }).done(function (response){
+        
+        var data = eval('('+response+')');
+        
         if(print){
             printDocument();
         }
@@ -180,7 +184,25 @@ function save(print){
 }
 
 function printDocument(){
-//    alert('imprimiendo');
+    var facturaId = $("#factura_id").val();
+    
+    $.get(baseUrl + 'api.php/ingresos/factura/imprimirFactura', {'factura_id':facturaId}, 
+        function(response){
+            
+            var data = $.parseJSON(response);
+            
+            var a = document.createElement("a");
+            a.href = 'data:application/pdf;base64,'+data.factura;
+            a.download = "factura.pdf"; //update for filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);            
+
+        }).done(function(){
+            
+        }).fail(function(){
+        });
+    
 }
 
 function loadProductosSelect(){
