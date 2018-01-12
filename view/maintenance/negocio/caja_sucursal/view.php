@@ -7,13 +7,7 @@
                 <th>sucursal_id</th>
                 <th>numero</th>
                 <th>nombre</th>
-                <th>prefijo</th>
-                <th>numero_inicial</th>
-                <th>numero_final</th>
-                <th>numero_actual</th>
-                <th>texto_numeracion</th>
-                <th>texto_resolucion</th>
-                <th>a_usuario</th>
+                <th>a_usuario_id</th>
                 <th>a_ip</th>
                 <th>a_fecha</th>
                 <th>a_estado_id</th>
@@ -63,38 +57,8 @@
 											<p class='help-block'></p>
 										</div>                                        
 										<div class='form-group'>
-											<label>prefijo:</label>
-											<input class='form-control' name='prefijo' id='caja_sucursal_prefijo'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>numero_inicial:</label>
-											<input class='form-control' name='numero_inicial' id='caja_sucursal_numero_inicial'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>numero_final:</label>
-											<input class='form-control' name='numero_final' id='caja_sucursal_numero_final'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>numero_actual:</label>
-											<input class='form-control' name='numero_actual' id='caja_sucursal_numero_actual'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>texto_numeracion:</label>
-											<input class='form-control' name='texto_numeracion' id='caja_sucursal_texto_numeracion'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>texto_resolucion:</label>
-											<input class='form-control' name='texto_resolucion' id='caja_sucursal_texto_resolucion'>
-											<p class='help-block'></p>
-										</div>                                        
-										<div class='form-group'>
-											<label>a_usuario:</label>
-											<input class='form-control' name='a_usuario' id='caja_sucursal_a_usuario'>
+											<label>a_usuario_id:</label>
+											<input class='form-control' name='a_usuario_id' id='caja_sucursal_a_usuario_id'>
 											<p class='help-block'></p>
 										</div>                                        
 										<div class='form-group'>

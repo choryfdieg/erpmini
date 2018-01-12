@@ -20,7 +20,7 @@ class Apertura_cajaControl {
     }
 
     public function index() {
-        
+        include_once 'view/negocio/apertura_caja/create.php';
     }
 
     public function view() {
@@ -28,7 +28,6 @@ class Apertura_cajaControl {
     }
     
     public function create() {
-        include_once 'view/negocio/apertura_caja/create.php';
     }
 
     /**

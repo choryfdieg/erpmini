@@ -9,7 +9,7 @@
 * Description of Factura_producto
 *
 * @author chory
-* @date 2017-11-02 15:11:26
+* @date 2018-01-10 09:01:52
 */
 require_once 'model/Entity.php';
 
@@ -31,7 +31,7 @@ class Factura_producto extends Entity{
    * @length (15)
    */
    public $factura_id;
-   
+
    /**
    *
    * @type bigint(15)
@@ -87,14 +87,14 @@ class Factura_producto extends Entity{
    * @length (11)
    */
    public $cantidad_devolucion;
-   
+
    /**
    *
    * @type varchar(1000)
    * @length (1000)
    */
    public $producto;
-   
+
    /**
    *
    * @type varchar(45)
@@ -118,10 +118,10 @@ class Factura_producto extends Entity{
 
    /**
    *
-   * @type varchar(45)
-   * @length (45)
+   * @type int(11)
+   * @length (11)
    */
-   public $a_usuario;
+   public $a_usuario_id;
 
    /**
    *
@@ -166,15 +166,17 @@ class Factura_producto extends Entity{
    public function getFactura_id(){
        return $this->factura_id;
    }
-   
-   function getFactura_producto_id() {
+
+
+   public function setFactura_producto_id($factura_producto_id){
+      $this->factura_producto_id = $factura_producto_id;
+   }
+
+   public function getFactura_producto_id(){
        return $this->factura_producto_id;
    }
 
-   function setFactura_producto_id($factura_producto_id) {
-       $this->factura_producto_id = $factura_producto_id;
-   }
-   
+
    public function setTarifa_id($tarifa_id){
       $this->tarifa_id = $tarifa_id;
    }
@@ -218,30 +220,32 @@ class Factura_producto extends Entity{
    public function getValor_total(){
        return $this->valor_total;
    }
-   
-   
-   function getProducto() {
-       return $this->producto;
-   }
 
-   function setProducto($producto) {
-       $this->producto = $producto;
-   }
 
-   function getCantidad_devolucion() {
-       return $this->cantidad_devolucion;
-   }
-
-   function setCantidad_devolucion($cantidad_devolucion) {
-       $this->cantidad_devolucion = $cantidad_devolucion;
-   }
-
-    public function setValor_impuesto($valor_impuesto){
+   public function setValor_impuesto($valor_impuesto){
       $this->valor_impuesto = $valor_impuesto;
    }
 
    public function getValor_impuesto(){
        return $this->valor_impuesto;
+   }
+
+
+   public function setCantidad_devolucion($cantidad_devolucion){
+      $this->cantidad_devolucion = $cantidad_devolucion;
+   }
+
+   public function getCantidad_devolucion(){
+       return $this->cantidad_devolucion;
+   }
+
+
+   public function setProducto($producto){
+      $this->producto = $producto;
+   }
+
+   public function getProducto(){
+       return $this->producto;
    }
 
 
@@ -272,12 +276,12 @@ class Factura_producto extends Entity{
    }
 
 
-   public function setA_usuario($a_usuario){
-      $this->a_usuario = $a_usuario;
+   public function setA_usuario_id($a_usuario_id){
+      $this->a_usuario_id = $a_usuario_id;
    }
 
-   public function getA_usuario(){
-       return $this->a_usuario;
+   public function getA_usuario_id(){
+       return $this->a_usuario_id;
    }
 
 

@@ -29,8 +29,17 @@ $(document).ready(function(){
         var option = $(row).find('.item').select2('data')[0].element;
         
         var data = $(option).data('tarifa');
-    
-        $(row).find('.total_row').html((data.valorUnitario * $(this).val()) - $(descuento).val());
+        
+        if(parseFloat($(this).val()) > parseFloat(data.existencias)){
+            bootbox.alert({
+                title: 'Validación de existencias',
+                message: '<div class="alert alert-danger"><b>Oh!</b> La cantidad factura ('+$(this).val()+') es mayor a las existencias ('+data.existencias+') del articulo en el inventario.</div>',
+                backdrop: true,
+                className: 'top-30pe'
+            });
+        }
+        
+        $(row).find('.total_row').html(formatMoneda((data.valorUnitario * $(this).val()) - $(descuento).val(), true, ''));
     
         uploadSubtotal();
     });
@@ -45,7 +54,7 @@ $(document).ready(function(){
         
         var data = $(option).data('tarifa');
     
-        $(row).find('.total_row').html((data.valorUnitario * $(cantidad).val()) - $(this).val());
+        $(row).find('.total_row').html(formatMoneda((data.valorUnitario * $(cantidad).val()) - $(this).val(), true, ''));
     
         uploadSubtotal();
     });
@@ -94,11 +103,13 @@ function uploadSubtotal(){
         
     });
     
-    $("#factura_base").html(base);
-    $("#factura_impuestos").html(impuestos);
-    $("#factura_subtotal").html(subtotal);
-    $("#factura_descuentos").html(descuentos);
-    $("#factura_total").html(subtotal - descuentos);    
+    $("#factura_base").html(formatMoneda(base, true, ''));
+    $("#factura_impuestos").html(formatMoneda(impuestos, true, ''));
+    $("#factura_subtotal").html(formatMoneda(subtotal, true, ''));
+    $("#factura_descuentos").html(formatMoneda(descuentos, true, ''));
+    $("#factura_total").html(formatMoneda(subtotal - descuentos, true, ''));    
+    
+    verificarTotalFormasPago();
 }
 
 function setOptionData(){
@@ -115,10 +126,26 @@ function setOptionData(){
     
     $($(this).closest("tr").find(".cantidad").get(0)).val(1);
     
-    $($(this).closest("tr").find(".total_row").get(0)).html(data.valorUnitario);
+    $($(this).closest("tr").find(".total_row").get(0)).html(formatMoneda(data.valorUnitario, true, ''));
     
     uploadSubtotal();
     
+    cargarExistenciasProducto(data);
+    
+}
+
+function cargarExistenciasProducto(dataOption){
+    $.get(baseUrl + 'api.php/ingresos/factura/existenciasProducto', {'tarifaId' : dataOption.tarifaId}, 
+        function(response){
+            
+            var item = eval('('+response+')');            
+            
+            dataOption['existencias'] = item.existencias;
+            
+            
+        }).done(function(){
+        }).fail(function(){
+        });
 }
 
 function validarFactura(){
@@ -132,7 +159,7 @@ function validarFactura(){
     }else{
         bootbox.alert({
             title: 'Validación del documento',
-            message: '<div class="alert alert-danger"><b>Oh!</b> Todavia restan $' + restante + ' para cubrir el total de la factura. Verifica los valores de las formas de pago.</div>',
+            message: '<div class="alert alert-danger"><b>Oh!</b> Todavia restan $' + formatMoneda(restante, true, '') + ' para cubrir el total de la factura. Verifica los valores de las formas de pago.</div>',
             backdrop: true,
             className: 'top-30pe'
         });
@@ -171,7 +198,7 @@ function save(print){
         var data = eval('('+response+')');
         
         if(print){
-            printDocument();
+            printDocument(data.id);
         }
     }).always(function(response){
         
@@ -183,8 +210,13 @@ function save(print){
     });
 }
 
-function printDocument(){
+function printDocument(facturaIdResponse){
+    
     var facturaId = $("#factura_id").val();
+    
+    if(facturaId === ""){
+        facturaId = facturaIdResponse;
+    }
     
     $.get(baseUrl + 'api.php/ingresos/factura/imprimirFactura', {'factura_id':facturaId}, 
         function(response){
@@ -199,7 +231,7 @@ function printDocument(){
             document.body.removeChild(a);            
 
         }).done(function(){
-            
+            window.location.assign("index.php/ingresos/factura/edit/id/"+facturaId);
         }).fail(function(){
         });
     
@@ -232,7 +264,9 @@ function loadProductosSelect(){
                     text: '<div><span style="display:none;">'+e.id+'</span><strong>'+e.producto+' ('+e.unidad_medida+')</strong></div>'
                 });
                 
-                option.data('tarifa', {valorUnitario: e.valor_unitario, impuesto: e.impuesto, porcentaje_impuesto: e.porcentaje_impuesto});
+                option.data('tarifa', {tarifaId: e.id, valorUnitario: e.valor_unitario, 
+                                        impuesto: e.impuesto, porcentaje_impuesto: e.porcentaje_impuesto,
+                                        existencias: e.existencias});
                 
                 $(select).append(option);
             });
@@ -368,7 +402,7 @@ function loadFacturaProductosTable(){
                 
                 // *** input total
                 var totalRow = $(newTr).find('.total_row').get(0);                
-                $(totalRow).html(e.valor_total);
+                $(totalRow).html(formatMoneda(e.valor_total, true, ''));
                 // *** end input
                 
                 $(newTr).show();
@@ -541,7 +575,9 @@ function addItemFacturaFormaDePagoTable(){
 
 function verificarTotalFormasPago(){
     
-    var total = parseInt($("#factura_total").html());
+    var totalFormato = $("#factura_total").html().replace('.', '');
+    
+    var total = parseInt(totalFormato);
     
     var formasTr = $("#factura_forma_pago_table tbody tr.factura_formas_pago");
     
@@ -561,17 +597,41 @@ function verificarTotalFormasPago(){
     
     var restante = total - totalFormasPago;
     
-    $("#total_formas_span").html(totalFormasPago);
-    $("#restante_formas_span").html(restante);
+    if(!$.isNumeric(restante)){
+        restante = 0;
+    }
+    
+    $("#total_formas_span").html(formatMoneda(totalFormasPago, true, ''));
+    $("#restante_formas_span").html(formatMoneda(restante, true, ''));
     
     var alertClass = "text-danger";
     
     $("#restante_formas_span").removeClass(alertClass);
     
-    if(restante < 0){
+    if(restante !== 0){
         $("#restante_formas_span").addClass(alertClass);
     }
     
     return restante;
     
+}
+
+function descartarFactura(){
+    
+    var facturaId = $("#factura_id").val();
+    
+    if(facturaId === ''){
+        window.location.assign("index.php/ingresos/factura/create/");
+        return false;
+    }
+    
+    $.ajax({url: baseUrl + 'api.php/ingresos/factura/descartarFactura', 
+            type: 'put',
+            data: {'factura_id' : facturaId},
+        success: function (response) {
+            
+        }
+    }).done(function (response){        
+        window.location.assign("index.php/ingresos/factura/create/");        
+    });
 }

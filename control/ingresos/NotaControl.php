@@ -9,8 +9,8 @@
  *
  * @author chory
  */
+require_once 'control/ingresos/FacturaCommonControl.php';
 require_once 'model/crm/facade/TerceroFacade.php';
-require_once 'model/ingresos/facade/FacturaFacade.php';
 require_once 'model/ingresos/facade/Factura_productoFacade.php';
 require_once 'model/ingresos/facade/Factura_forma_pagoFacade.php';
 require_once 'model/ingresos/facade/Forma_pagoFacade.php';
@@ -18,8 +18,9 @@ require_once 'model/negocio/facade/ProductoFacade.php';
 require_once 'model/negocio/facade/TarifaFacade.php';
 require_once 'model/ingresos/entity/Factura_producto.php';
 require_once 'model/ingresos/entity/Factura.php';
+require_once 'model/negocio/facade/Apertura_cajaFacade.php';
 
-class NotaControl {
+class NotaControl extends FacturaCommonControl{
 
     function NotaControl() {
         
@@ -96,10 +97,15 @@ class NotaControl {
         $facturaFormasDePagoRequest = (isset($request->factura_forma_pago)) ? $request->factura_forma_pago : array();
 
         $facturaFacade = new FacturaFacade();
+        $apertura_cajaFacade = new Apertura_cajaFacade();
+       
+        $apertura_caja = $apertura_cajaFacade->getCajaAbiertaUsuario();
 
         $factura = $facturaFacade->findById($facturaRequest->id);
 
         $factura->merge($request->factura);
+        
+        $factura->apertura_caja_id = $apertura_caja->id;
 
         $facturaFacade->doEdit($factura);
 

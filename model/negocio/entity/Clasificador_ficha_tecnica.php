@@ -9,7 +9,7 @@
 * Description of Clasificador_ficha_tecnica
 *
 * @author chory
-* @date 2017-11-02 15:11:26
+* @date 2018-01-10 09:01:52
 */
 require_once 'model/Entity.php';
 

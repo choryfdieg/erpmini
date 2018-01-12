@@ -16,6 +16,10 @@ $(document).ready(function(){
         uploadSubtotal();
     });
     
+    $(".valor").on('change', function(){
+        verificarTotalFormasPago();
+    });
+    
 });
 
 function loadNotasTable(){
@@ -103,16 +107,25 @@ function uploadSubtotal(){
         
     });
     
-    $("#factura_base").html(base);
-    $("#factura_impuestos").html(impuestos);
-    $("#factura_subtotal").html(subtotal);
-    $("#factura_descuentos").html(descuentos);
-    $("#factura_total").html(subtotal - descuentos);
+    $("#factura_base").html(formatMoneda(base, true, ''));
+    $("#factura_impuestos").html(formatMoneda(impuestos, true, ''));
+    $("#factura_subtotal").html(formatMoneda(subtotal, true, ''));
+    $("#factura_descuentos").html(formatMoneda(descuentos, true, ''));
+    $("#factura_total").html(formatMoneda(subtotal - descuentos, true, ''));
+    
+    verificarTotalFormasPago();
 }
 
 function save(print){
     
     var type = 'post';
+    
+    if(print){
+        if(validarFactura() === false){
+
+            return false;
+        }
+    }
     
     if($("#factura_id").val() !== ''){
         type = 'put';
@@ -125,19 +138,70 @@ function save(print){
             
             var data = eval('('+response+')');
             
-            if(!print){
-                window.location.assign("index.php/ingresos/nota/edit/id/"+data.id);
-            }
         }
-    }).done(function (){
+    }).done(function (response){
+        
+        var data = eval('('+response+')');
+        
         if(print){
-            printDocument();
+            printDocument(data.id);
+        }
+    }).always(function(response){
+        
+        var data = eval('('+response+')');
+        
+        if(!print){
+            window.location.assign("index.php/ingresos/nota/edit/id/"+data.id);
         }
     });
 }
 
-function printDocument(){
-    alert('imprimiendo');
+function validarFactura(){
+    
+    var validacion = false;
+    
+    var restante = verificarTotalFormasPago();
+    
+    if(restante === 0){
+        validacion = true;
+    }else{
+        bootbox.alert({
+            title: 'Validación del documento',
+            message: '<div class="alert alert-danger"><b>Oh!</b> Todavia restan $' + formatMoneda(restante, true, '') + ' para cubrir el total de la factura. Verifica los valores de las formas de pago.</div>',
+            backdrop: true,
+            className: 'top-30pe'
+        });
+        
+    }
+    
+    return validacion;
+}
+
+function printDocument(facturaIdResponse){
+    
+    var facturaId = $("#factura_id").val();
+    
+    if(facturaId === ""){
+        facturaId = facturaIdResponse;
+    }
+    
+    $.get(baseUrl + 'api.php/ingresos/factura/imprimirFactura', {'factura_id':facturaId}, 
+        function(response){
+            
+            var data = $.parseJSON(response);
+            
+            var a = document.createElement("a");
+            a.href = 'data:application/pdf;base64,'+data.factura;
+            a.download = "factura.pdf"; //update for filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);            
+
+        }).done(function(){
+            window.location.assign("index.php/ingresos/nota/edit/id/"+facturaId);
+        }).fail(function(){
+        });
+    
 }
 
 function removeItemTable(element){
@@ -283,6 +347,8 @@ function loadFacturaFormaDePagoTable(){
                 
                 var newTr = tr.clone(true);
                 
+                $(newTr).addClass('factura_formas_pago');
+                
                 // *** input item_id
                 var formaId = $(newTr).find('.forma_id').get(0);
                 $(formaId).attr('name', 'factura_forma_pago['+index+'][id]');
@@ -329,6 +395,7 @@ function loadFacturaFormaDePagoTable(){
             
         }).always(function(){
             addItemFacturaFormaDePagoTable();
+            verificarTotalFormasPago();
         }).fail(function(){
         });
 }
@@ -342,6 +409,8 @@ function addItemFacturaFormaDePagoTable(){
     var index = trCount - 1;
     
     var newTr = tr.clone(true);
+    
+    $(newTr).addClass('factura_formas_pago');
                 
     // *** input forma_id
     var formaId = $(newTr).find('.forma_id').get(0);
@@ -375,4 +444,47 @@ function addItemFacturaFormaDePagoTable(){
     $(newTr).show();
 
     $("#factura_forma_pago_table").append(newTr);
+}
+
+function verificarTotalFormasPago(){
+    
+    var totalFormato = $("#factura_total").html().replace('.', '');
+    
+    var total = parseInt(totalFormato);
+    
+    var formasTr = $("#factura_forma_pago_table tbody tr.factura_formas_pago");
+    
+    var totalFormasPago = 0;
+    
+    $.each(formasTr, function(i, e){
+        
+        var valor = 0;
+        
+        if($(e).find('.valor').val() > 0){
+            valor = $(e).find('.valor').val();
+        }
+        
+        totalFormasPago += parseInt(valor);
+        
+    });    
+    
+    var restante = total - totalFormasPago;
+    
+    if(!$.isNumeric(restante)){
+        restante = 0;
+    }
+    
+    $("#total_formas_span").html(formatMoneda(totalFormasPago, true, ''));
+    $("#restante_formas_span").html(formatMoneda(restante, true, ''));
+    
+    var alertClass = "text-danger";
+    
+    $("#restante_formas_span").removeClass(alertClass);
+    
+    if(restante !== 0){
+        $("#restante_formas_span").addClass(alertClass);
+    }
+    
+    return restante;
+    
 }

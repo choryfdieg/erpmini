@@ -27,8 +27,13 @@ class Apertura_cajaFacade extends AbstractFacade {
         
         $usuario = $_SESSION['login'];
         
-        $aperturaCaja = $this->setParams(array('singleResult' => true,
-                                            'filters' => array(" and estado_caja_id = 1 and a_usuario = '{$usuario}'")))
+        $aperturaCaja = $this->setParams(array('select' => array('a.id, a.fecha_apertura'), 'singleResult' => true,
+                                                'alias' => 'a',
+                                                'joins' => array(array(
+                                                    'schema' => 'erpmini',
+                                                    'alias' => 'b',
+                                                    'table' => 'a_usuario')), 
+                                                'filters' => array(" and estado_caja_id = 1 and b.user = '{$usuario}'")))
                                                     ->findEntities();
         
         return $aperturaCaja;

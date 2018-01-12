@@ -9,8 +9,8 @@
  *
  * @author chory
  */
+require_once 'control/ingresos/FacturaCommonControl.php';
 require_once 'model/crm/facade/TerceroFacade.php';
-require_once 'model/ingresos/facade/FacturaFacade.php';
 require_once 'model/ingresos/facade/Factura_productoFacade.php';
 require_once 'model/ingresos/facade/Factura_forma_pagoFacade.php';
 require_once 'model/ingresos/facade/Forma_pagoFacade.php';
@@ -20,7 +20,7 @@ require_once 'model/ingresos/entity/Factura_producto.php';
 require_once 'model/ingresos/entity/Factura.php';
 require_once 'model/negocio/facade/Apertura_cajaFacade.php';
 
-class FacturaControl {
+class FacturaControl extends FacturaCommonControl{
 
     function FacturaControl() {
         
@@ -57,7 +57,8 @@ class FacturaControl {
     
     public function getFacturas($request){        
        $facturaFacade = new FacturaFacade();
-       $entities = $facturaFacade->setParams(array('filters' => array('and tipo_factura_id = ' . FacturaFacade::$TIPO_FACTURA), 'orderBy' => 'id asc','likeArray' => true))->findEntities();
+       $entities = $facturaFacade->setParams(array('filters' => array('and tipo_factura_id = ' . FacturaFacade::$TIPO_FACTURA), 
+                                                    'orderBy' => 'id asc','likeArray' => true))->findEntities();
        $entitiesData = array();
        foreach ($entities as $entity) {
            $entitiesData[] = array_values($entity);
@@ -250,25 +251,35 @@ class FacturaControl {
         echo json_encode($facturaFormasDePago);
     }
     
-    public function getImprimirFactura($request){
-        
-        ob_get_clean();
+    public function putDescartarFactura($request){
         
         $facturaId = $request->factura_id;
         
         $facturaFacade = new FacturaFacade();
         
-        $actualizado = $facturaFacade->actualizarNumeracionFactura($facturaId);
+        $facturaFacade->descartarFactura($facturaId);
         
-        $mensaje = '';
+        echo json_encode(array('id' => $facturaId));
         
-        if($actualizado == false){
-            $mensaje = 'Error. No se pudo actualizar la numeracion de la factura';
-            echo json_encode(array('actualizado' => $actualizado, 'mensaje' => $mensaje));
-            die;
-        }
-        
-        echo json_encode(array('factura' => $facturaFacade->imprimirFactura($facturaId)));
     }
+    
+    public function getExistenciasProducto($request){        
+        
+        $kardexFacade = new KardexFacade();
+        $facturaFacade = new FacturaFacade();
+        
+        $datosCaja = $facturaFacade->getDatosCaja();
+        
+        $sucursalId = $datosCaja['sucursal_id'];
+        
+        
+        $result = $kardexFacade->setParams(array('likeArray' => true, 'singleResult' => true, 'select' => array('sum(cantidad) as cantidad'), 
+                                        'filters' => array(" and sucursal_id = $sucursalId", 
+                                                            " and tarifa_id = $request->tarifaId")))->findEntities();
+        
+        $existencias = $result[0]['cantidad'];
+        
+        echo json_encode(array('existencias' => $existencias));       
+   }
 
 }

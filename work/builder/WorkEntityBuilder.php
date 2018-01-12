@@ -21,51 +21,52 @@ class WorkEntityBuilder extends AbstractFacade{
         
         $this->entities = array();
         
-        $this->entities['sistema'] = array();
-        $this->entities['negocio'] = array();
-        $this->entities['contabilidad'] = array();
-        $this->entities['crm'] = array();
-        $this->entities['kardex'] = array();
-        $this->entities['ingresos'] = array();
+//        $this->entities['sistema'] = array();
+//        $this->entities['negocio'] = array();
+//        $this->entities['contabilidad'] = array();
+//        $this->entities['crm'] = array();
+//        $this->entities['kardex'] = array();
+//        $this->entities['ingresos'] = array();
         
-        $this->entities['sistema'][] = 'a_estado';
-        $this->entities['sistema'][] = 'apelativo';
-        $this->entities['negocio'][] = 'apertura_caja';
+//        $this->entities['sistema'][] = 'a_estado';
+//        $this->entities['sistema'][] = 'apelativo';
+//        $this->entities['negocio'][] = 'apertura_caja';
         $this->entities['negocio'][] = 'caja_sucursal';
-        $this->entities['contabilidad'][] = 'centro_costo';
-        $this->entities['sistema'][] = 'ciudad';
-        $this->entities['negocio'][] = 'clasificador_ficha_tecnica';
-        $this->entities['contabilidad'][] = 'compania';
-        $this->entities['crm'][] = 'contactos';
-        $this->entities['sistema'][] = 'estado_caja';
-        $this->entities['ingresos'][] = 'factura';
-        $this->entities['ingresos'][] = 'factura_forma_pago';
-        $this->entities['ingresos'][] = 'factura_producto';
-        $this->entities['ingresos'][] = 'factura_producto_saldo';
-        $this->entities['ingresos'][] = 'factura_producto_saldo_detalle';
-        $this->entities['negocio'][] = 'ficha_tecnica';
-        $this->entities['ingresos'][] = 'forma_pago';
-        $this->entities['negocio'][] = 'grupo_unidad_medida';
-        $this->entities['negocio'][] = 'impuesto';
-        $this->entities['kardex'][] = 'kardex';
-        $this->entities['negocio'][] = 'numero_factura';
-        $this->entities['sistema'][] = 'pais';
-        $this->entities['negocio'][] = 'producto';
-        $this->entities['contabilidad'][] = 'puc';
-        $this->entities['sistema'][] = 'region';
-        $this->entities['kardex'][] = 'saldos_promedio_ponderado';
-        $this->entities['negocio'][] = 'sucursal';
-        $this->entities['negocio'][] = 'tarifa';
-        $this->entities['crm'][] = 'tercero';
-        $this->entities['sistema'][] = 'tipo_documento';
-        $this->entities['sistema'][] = 'tipo_factura';
-        $this->entities['sistema'][] = 'tipo_movimiento_kardex';
-        $this->entities['negocio'][] = 'unidad_medida';
+//        $this->entities['contabilidad'][] = 'centro_costo';
+//        $this->entities['sistema'][] = 'ciudad';
+//        $this->entities['negocio'][] = 'clasificador_ficha_tecnica';
+//        $this->entities['contabilidad'][] = 'compania';
+//        $this->entities['crm'][] = 'contactos';
+//        $this->entities['sistema'][] = 'estado_caja';
+//        $this->entities['ingresos'][] = 'factura';
+//        $this->entities['ingresos'][] = 'factura_forma_pago';
+//        $this->entities['ingresos'][] = 'factura_producto';
+//        $this->entities['ingresos'][] = 'factura_producto_saldo';
+//        $this->entities['ingresos'][] = 'factura_producto_saldo_detalle';
+//        $this->entities['negocio'][] = 'ficha_tecnica';
+//        $this->entities['ingresos'][] = 'forma_pago';
+//        $this->entities['negocio'][] = 'grupo_unidad_medida';
+//        $this->entities['negocio'][] = 'impuesto';
+//        $this->entities['kardex'][] = 'kardex_tmp';
+//        $this->entities['negocio'][] = 'numero_factura';
+//        $this->entities['sistema'][] = 'pais';
+//        $this->entities['negocio'][] = 'producto';
+//        $this->entities['negocio'][] = 'documento_caja';
+//        $this->entities['contabilidad'][] = 'puc';
+//        $this->entities['sistema'][] = 'region';
+//        $this->entities['kardex'][] = 'saldos_promedio_ponderado';
+//        $this->entities['negocio'][] = 'sucursal';
+//        $this->entities['negocio'][] = 'tarifa';
+//        $this->entities['crm'][] = 'tercero';
+//        $this->entities['sistema'][] = 'tipo_documento';
+//        $this->entities['sistema'][] = 'tipo_factura';
+//        $this->entities['sistema'][] = 'tipo_movimiento_kardex';
+//        $this->entities['negocio'][] = 'unidad_medida';
 
     }
     
     public function index(){
-        $rutas = $this->getRutas();
+//        $rutas = $this->getRutas();
         include_once 'view/builder/wEntityBuilder.php';
     }
     
@@ -121,39 +122,41 @@ class WorkEntityBuilder extends AbstractFacade{
         
         $abstractFacade = new AbstractFacade();
 
-        if($params['motor'] == 'mysql'){
-            $abstractFacade->setMotor(AbstractFacade::$MYSQL);
-            $sql = "describe $params[esquema].$params[tabla]";
-        }
-
-        $result = $abstractFacade->executeQuery($sql);
-        
-        
-//        foreach ($this->entities as $modulo => $entidades) {
-//            
-//            foreach ($entidades as $entidad) {
-//                $params = array();
-//
-//                $params['esquema'] = 'erpmini';
-//                $params['tabla'] = $entidad;
-//
-//                $abstractFacade->setMotor(AbstractFacade::$MYSQL);
-//                $sql = "describe $params[esquema].$params[tabla]";
-//
-//                $result = $abstractFacade->executeQuery($sql);
-//
-//                $this->buildEntity($result, $entidad, $modulo);
-//            }
-//        
+//        if($params['motor'] == 'mysql'){
+//            $abstractFacade->setMotor(AbstractFacade::$MYSQL);
+//            $sql = "describe $params[esquema].$params[tabla]";
 //        }
+//
+//        $result = $abstractFacade->executeQuery($sql);
         
-        $this->buildEntity($result, $params['tabla'], $params['modulo']);
-        $this->buildFacade($params['tabla'], $params['modulo']);
-        $this->buildControl($params['tabla'], $params['modulo']);
-        $this->buildList($result, $params['tabla'], $params['modulo']);
-        $this->buildJs($params['tabla'], $params['modulo']);
+        
+        foreach ($this->entities as $modulo => $entidades) {
+            
+            foreach ($entidades as $entidad) {
+                $params = array();
 
-        $this->index();
+                $params['esquema'] = 'erpmini';
+                $params['tabla'] = $entidad;
+
+                $abstractFacade->setMotor(AbstractFacade::$MYSQL);
+                $sql = "describe $params[esquema].$params[tabla]";
+
+                $result = $abstractFacade->executeQuery($sql);
+
+                $this->buildEntity($result, $entidad, $modulo);
+                $this->buildFacade($entidad, $modulo);
+                $this->buildList($result, $entidad, $modulo);
+            }
+        
+        }
+        
+//        $this->buildEntity($result, $params['tabla'], $params['modulo']);
+//        $this->buildFacade($params['tabla'], $params['modulo']);
+//        $this->buildControl($params['tabla'], $params['modulo']);
+//        $this->buildList($result, $params['tabla'], $params['modulo']);
+//        $this->buildJs($params['tabla'], $params['modulo']);
+//
+//        $this->index();
 
     }
     

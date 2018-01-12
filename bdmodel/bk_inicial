@@ -2,78 +2,76 @@ INSERT INTO `a_estado` (`id`,`tabla`,`descripcion_corta`,`descripcion_larga`) VA
  (1,'All','Registro activo','Registro activo de una tabla para el sistema'),
  (2,'All','Registro activo','Registro activo de una tabla para el sistema');
 
- INSERT INTO `sucursal` (`id`,`nombre`,`descripcion`,`centro_costo_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,'Principal','Sede principal',1,'dfgarcia','127.0.0.1','2017-10-30 15:01:37',NULL),
- (2,'Centro','Sede centro',2,'dfgarcia','127.0.0.1','2017-10-30 15:01:49',NULL);
+ INSERT INTO `sucursal` (`id`,`nombre`,`descripcion`,`centro_costo_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,'Principal','Sede principal',1,1,'127.0.0.1','2017-10-30 15:01:37',NULL),
+ (2,'Centro','Sede centro',2,1,'127.0.0.1','2017-10-30 15:01:49',NULL);
 
- INSERT INTO `caja_sucursal` (`id`,`numero`,`nombre`,`sucursal_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ INSERT INTO `caja_sucursal` (`id`,`numero`,`nombre`,`sucursal_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,'1','Caja 1 Principal',1,NULL,NULL,NULL,NULL);
 
-INSERT INTO `forma_pago` (`id`,`tipo_forma_pago_id`,`nombre`,`puc_debito_id`,`puc_credito_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+INSERT INTO `forma_pago` (`id`,`tipo_forma_pago_id`,`nombre`,`puc_debito_id`,`puc_credito_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,NULL,'Efectivo',NULL,NULL,NULL,NULL,NULL,NULL),
  (2,NULL,'Cheque',NULL,NULL,NULL,NULL,NULL,NULL),
  (3,NULL,'Consignacion',NULL,NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO `grupo_unidad_medida` (`id`,`nombre`,`descripcion`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+INSERT INTO `grupo_unidad_medida` (`id`,`nombre`,`descripcion`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,'Unidad',NULL,NULL,NULL,NULL,NULL),
  (2,'Longitud',NULL,NULL,NULL,NULL,NULL),
- (3,'&Aacute;rea',NULL,'dfgarcia','127.0.0.1','2017-10-30 15:56:36',NULL),
+ (3,'&Aacute;rea',NULL,1,'127.0.0.1','2017-10-30 15:56:36',NULL),
  (4,'Volumen',NULL,NULL,NULL,NULL,NULL),
  (5,'Peso',NULL,NULL,NULL,NULL,NULL);
 
- INSERT INTO `unidad_medida` (`id`,`grupo_unidad_medida_id`,`simbolo`,`descripcion`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,1,'.','Unidad','dfgarcia','127.0.0.1','2017-10-30 15:47:43',NULL),
- (2,1,'.','Servicio','dfgarcia','127.0.0.1','2017-10-30 15:47:58',NULL),
- (3,1,'.','Pieza','dfgarcia','127.0.0.1','2017-10-30 15:48:04',NULL),
- (4,2,'cm','CentÃ­metro','dfgarcia','127.0.0.1','2017-10-30 15:48:37',NULL),
- (5,2,'m','Metro','dfgarcia','127.0.0.1','2017-10-30 15:49:08',NULL),
- (6,2,'pulg','Pulgada','dfgarcia','127.0.0.1','2017-10-30 15:49:20',NULL),
- (7,3,'cm2','CentÃ­metro cuadrado','dfgarcia','127.0.0.1','2017-10-30 15:50:18',NULL),
- (8,3,'m2','Metro cuadrado','dfgarcia','127.0.0.1','2017-10-30 15:50:38',NULL),
- (9,3,NULL,'Pulgada cuadrada','dfgarcia','127.0.0.1','2017-10-30 15:50:54',NULL),
- (10,4,'mL','Mililitro','dfgarcia','127.0.0.1','2017-10-30 15:51:18',NULL),
- (11,4,'L','Litro','dfgarcia','127.0.0.1','2017-10-30 15:51:28',NULL),
- (12,4,'G','GalÃ³n','dfgarcia','127.0.0.1','2017-10-30 15:51:38',NULL),
- (13,5,'g','Gramo','dfgarcia','127.0.0.1','2017-10-30 15:51:55',NULL),
- (14,5,'Kg','Kilogramo','dfgarcia','127.0.0.1','2017-10-30 15:52:15',NULL),
- (15,5,'T','Tonelada','dfgarcia','127.0.0.1','2017-10-30 15:52:27',NULL),
- (16,5,'lbr','Libra','dfgarcia','127.0.0.1','2017-10-30 15:52:38',NULL);
+ INSERT INTO `unidad_medida` (`id`,`grupo_unidad_medida_id`,`simbolo`,`descripcion`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,1,'.','Unidad',1,'127.0.0.1','2017-10-30 15:47:43',NULL),
+ (2,1,'.','Servicio',1,'127.0.0.1','2017-10-30 15:47:58',NULL),
+ (3,1,'.','Pieza',1,'127.0.0.1','2017-10-30 15:48:04',NULL),
+ (4,2,'cm','CentÃ­metro',1,'127.0.0.1','2017-10-30 15:48:37',NULL),
+ (5,2,'m','Metro',1,'127.0.0.1','2017-10-30 15:49:08',NULL),
+ (6,2,'pulg','Pulgada',1,'127.0.0.1','2017-10-30 15:49:20',NULL),
+ (7,3,'cm2','CentÃ­metro cuadrado',1,'127.0.0.1','2017-10-30 15:50:18',NULL),
+ (8,3,'m2','Metro cuadrado',1,'127.0.0.1','2017-10-30 15:50:38',NULL),
+ (9,3,NULL,'Pulgada cuadrada',1,'127.0.0.1','2017-10-30 15:50:54',NULL),
+ (10,4,'mL','Mililitro',1,'127.0.0.1','2017-10-30 15:51:18',NULL),
+ (11,4,'L','Litro',1,'127.0.0.1','2017-10-30 15:51:28',NULL),
+ (12,4,'G','GalÃ³n',1,'127.0.0.1','2017-10-30 15:51:38',NULL),
+ (13,5,'g','Gramo',1,'127.0.0.1','2017-10-30 15:51:55',NULL),
+ (14,5,'Kg','Kilogramo',1,'127.0.0.1','2017-10-30 15:52:15',NULL),
+ (15,5,'T','Tonelada',1,'127.0.0.1','2017-10-30 15:52:27',NULL),
+ (16,5,'lbr','Libra',1,'127.0.0.1','2017-10-30 15:52:38',NULL);
 
 
-INSERT INTO `impuesto` (`id`,`nombre`,`porcentaje_impuesto`,`puc_debito_id`,`puc_credito_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,'IVA 19%',19,'1','2','dfgarcia','127.0.0.1','2017-10-30 15:02:05',NULL),
- (2,'IMP 8',8,'1','2','dfgarcia','127.0.0.1','2017-10-30 15:02:20',NULL);
+INSERT INTO `impuesto` (`id`,`nombre`,`porcentaje_impuesto`,`puc_debito_id`,`puc_credito_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,'IVA 19%',19,'1','2',1,'127.0.0.1','2017-10-30 15:02:05',NULL),
+ (2,'IMP 8',8,'1','2',1,'127.0.0.1','2017-10-30 15:02:20',NULL);
 
-INSERT INTO `producto` (`id`,`nombre`,`descripcion`,`impuesto_id`,`puc_credito_id`,`puc_debito_id`,`puc_cartera_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,'Lapiz','Lapiz mirado 2',1,1,1,1,'dfgarcia','127.0.0.1','2017-10-30 16:00:25',NULL),
- (2,'Borrador','Borrador para lapicero',1,1,1,1,'dfgarcia','127.0.0.1','2017-10-30 16:01:33',NULL);
+INSERT INTO `producto` (`id`,`nombre`,`descripcion`,`impuesto_id`,`puc_credito_id`,`puc_debito_id`,`puc_cartera_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,'Lapiz','Lapiz mirado 2',1,1,1,1,1,'127.0.0.1','2017-10-30 16:00:25',NULL),
+ (2,'Borrador','Borrador para lapicero',1,1,1,1,1,'127.0.0.1','2017-10-30 16:01:33',NULL);
 
-INSERT INTO `tarifa` (`id`,`producto_id`,`unidad_medida_id`,`costo_unitario`,`valor_unitario`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,1,1,'80','150','dfgarcia','127.0.0.1','2017-10-30 16:51:47',NULL),
- (2,2,1,'100','200','dfgarcia','127.0.0.1','2017-10-30 16:52:10',NULL);
+INSERT INTO `tarifa` (`id`,`producto_id`,`unidad_medida_id`,`costo_unitario`,`valor_unitario`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,1,1,'80','150',1,'127.0.0.1','2017-10-30 16:51:47',NULL),
+ (2,2,1,'100','200',1,'127.0.0.1','2017-10-30 16:52:10',NULL);
 
-INSERT INTO `kardex` (`id`,`sucursal_id`,`factura_id`,`tarifa_id`,`fecha`,`cantidad`,`costo_unitario`,`tipo_movimiento_kardex_id`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
- (1,1,NULL,1,'2017-10-30',300,'80',1,'dfgarcia','127.0.0.1','2017-10-30 16:51:48',1),
- (2,1,NULL,2,'2017-10-30',60,'100',1,'dfgarcia','127.0.0.1','2017-10-30 16:52:11',1);
+INSERT INTO `kardex` (`id`,`sucursal_id`,`factura_id`,`tarifa_id`,`fecha`,`cantidad`,`costo_unitario`,`tipo_movimiento_kardex_id`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+ (1,1,NULL,1,'2017-10-30',300,'80',1,1,'127.0.0.1','2017-10-30 16:51:48',1),
+ (2,1,NULL,2,'2017-10-30',60,'100',1,1,'127.0.0.1','2017-10-30 16:52:11',1);
 
-INSERT INTO `tipo_documento` (`id`,`sigla`,`descripcion`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+INSERT INTO `tipo_documento` (`id`,`sigla`,`descripcion`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,'CC','Cedula de Ciudadania',NULL,NULL,NULL,NULL),
  (2,'NI','NIT',NULL,NULL,NULL,NULL);
 
 
-INSERT INTO `tercero` (`id`,`tipo_documento_id`,`documento`,`esproveedor`,`nombre`,`apelativo_id`,`fecha_nacimiento`,`pais_id`,`ciudad_id`,`direccion`,`telefonos`,`correos_electronicos`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+INSERT INTO `tercero` (`id`,`tipo_documento_id`,`documento`,`esproveedor`,`nombre`,`apelativo_id`,`fecha_nacimiento`,`pais_id`,`ciudad_id`,`direccion`,`telefonos`,`correos_electronicos`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,1,'1093215867',NULL,'Diego Garcia',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (2,2,'800621400',NULL,'AURORA INC.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 
-INSERT INTO `tipo_factura` (`id`,`sigla`,`descripcion`,`a_usuario`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
+INSERT INTO `tipo_factura` (`id`,`sigla`,`descripcion`,`a_usuario_id`,`a_ip`,`a_fecha`,`a_estado_id`) VALUES 
  (1,'FA','Factura',NULL,NULL,NULL,NULL);
 
-INSERT INTO estado_caja (id,descripcion,a_usuario,a_ip,a_fecha,a_estado_id) VALUES (1,'Caja abierta','dfgarcia','127.0.0.1',{ts '2017-10-31 15:55:17'},1);
-INSERT INTO estado_caja (id,descripcion,a_usuario,a_ip,a_fecha,a_estado_id) VALUES (2,'Caja parcialmente cerrada','dfgarcia','127.0.0.1',{ts '2017-10-31 15:55:34'},1);
-INSERT INTO estado_caja (id,descripcion,a_usuario,a_ip,a_fecha,a_estado_id) VALUES (3,'Caja cerrada','dfgarcia','127.0.0.1',{ts '2017-10-31 15:55:51'},1);
+INSERT INTO estado_caja (id,descripcion,a_usuario_id,a_ip,a_fecha,a_estado_id) VALUES (1,'Caja abierta',1,'127.0.0.1',{ts '2017-10-31 15:55:17'},1);
+INSERT INTO estado_caja (id,descripcion,a_usuario_id,a_ip,a_fecha,a_estado_id) VALUES (2,'Caja parcialmente cerrada',1,'127.0.0.1',{ts '2017-10-31 15:55:34'},1);
+INSERT INTO estado_caja (id,descripcion,a_usuario_id,a_ip,a_fecha,a_estado_id) VALUES (3,'Caja cerrada',1,'127.0.0.1',{ts '2017-10-31 15:55:51'},1);
 
  
-INSERT INTO apertura_caja (id,caja_sucursal_id,fecha_apertura,fecha_cierre,estado_caja_id,a_usuario,a_ip,a_fecha,a_estado_id) VALUES (1,1,{ts '2017-10-31 00:00:00'},null,1,'dfgarcia','127.0.0.1',{ts '2017-10-31 15:56:37'},1);
-
-
+INSERT INTO apertura_caja (id,caja_sucursal_id,fecha_apertura,fecha_cierre,estado_caja_id,a_usuario_id,a_ip,a_fecha,a_estado_id) VALUES (1,1,{ts '2017-10-31 00:00:00'},null,1,1,'127.0.0.1',{ts '2017-10-31 15:56:37'},1);

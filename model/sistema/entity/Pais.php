@@ -9,7 +9,7 @@
 * Description of Pais
 *
 * @author chory
-* @date 2017-11-02 15:11:26
+* @date 2018-01-10 09:01:52
 */
 require_once 'model/Entity.php';
 
@@ -41,10 +41,10 @@ class Pais extends Entity{
 
    /**
    *
-   * @type varchar(45)
-   * @length (45)
+   * @type int(11)
+   * @length (11)
    */
-   public $a_usuario;
+   public $a_usuario_id;
 
    /**
    *
@@ -100,12 +100,12 @@ class Pais extends Entity{
    }
 
 
-   public function setA_usuario($a_usuario){
-      $this->a_usuario = $a_usuario;
+   public function setA_usuario_id($a_usuario_id){
+      $this->a_usuario_id = $a_usuario_id;
    }
 
-   public function getA_usuario(){
-       return $this->a_usuario;
+   public function getA_usuario_id(){
+       return $this->a_usuario_id;
    }
 
 

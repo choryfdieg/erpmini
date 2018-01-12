@@ -166,6 +166,16 @@
                             </td>
                         </tr>            
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><span class="pull-right text-bold">Total: </span></td>
+                            <td><span id="total_formas_span" class="text-bold"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="pull-right text-bold">Restante: </span></td>
+                            <td><span id="restante_formas_span" class="text-bold"></span></td>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div class="col-sm-6 col-xs-6">
                     <a href="javascript:;" onclick="addItemFacturaFormaDePagoTable()"><i class="fa fa-plus-circle"></i> Agregar forma de pago</a>
@@ -189,40 +199,56 @@
                     <tbody>
                         <tr>
                             <td class="text-right"><strong>Base</strong></td>
-                            <td class="text-right" id="factura_base">0</td>
+                            <td class="text-right" id="factura_base" style="padding-right: 6%">0</td>
                         </tr>
                         <tr>
                             <td class="text-right no-border"><strong>Impuestos</strong></td>
-                            <td class="text-right" id="factura_impuestos">0</td>
+                            <td class="text-right" id="factura_impuestos" style="padding-right: 6%">0</td>
                         </tr>
                         <tr>
                             <td class="text-right no-border"><strong>Subtotal</strong></td>
-                            <td class="text-right" id="factura_subtotal">0</td>
+                            <td class="text-right" id="factura_subtotal" style="padding-right: 6%">0</td>
                         </tr>
                         <tr>
                             <td class="text-right no-border"><strong>Descuentos</strong></td>
-                            <td class="text-right" id="factura_descuentos">0</td>
+                            <td class="text-right" id="factura_descuentos" style="padding-right: 6%">0</td>
                         </tr>
                         <tr>
                             <td class="text-right no-border">
                                 <div class="well well-small well-green"><strong>Total</strong></div>
                             </td>
-                            <td class="text-right text-bold" id="factura_total">0</td>
+                            <td class="text-right text-bold" ><div class="well well-small"><span id="factura_total"></span></div></td>
                         </tr>
                     </tbody>
                 </table>
                 
-                <div class="row">
-                    <div class="col-md-12 pull-right">
-                        <a class="btn btn-primary" href="index.php/ingresos/nota/">Cancelar</a>
-                        <a class="btn btn-primary" href="index.php/ingresos/nota/create">Crear nueva</a>
-                        <a class="btn btn-primary" href="javascript:;" onclick="save(false)">Guardar</a>
-                        <a class="btn btn-primary" href="javascript:;" onclick="save(true)">Guardar e imprimir</a>
-                    </div>
-                </div>
-                
             </div>
         </div>
+        
+        <div class="row">
+            <div style="float: right; margin-right: 1%;">
+                <div class="btn-group" style="padding-left: 10px">
+                    <a class="" href="index.php/ingresos/nota/" style="text-decoration: underline !important; font-weight: bold;">Volver</a>
+                </div>
+                <div class="btn-group" style="padding-left: 10px">
+                    <a class="btn btn-default" href="javascript:;" onclick="descartarFactura()">Descartar</a>
+                </div>
+                <div class="btn-group" style="padding-left: 10px">
+                    <a class="btn btn-default" href="index.php/ingresos/nota/create">Crear nueva</a>
+                </div>
+                <div class="btn-group" style="padding-left: 10px">
+                    <button style="width: 120px" type="button" class="btn btn-primary" onclick="save(false)">Guardar</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:;" onclick="save(true)">Guardar e imprimir</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
     </div>
 
 

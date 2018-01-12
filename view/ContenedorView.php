@@ -224,7 +224,7 @@
                           <span>Ingresos</span>
                       </a>
                       <ul class="sub">
-                          <li><a href="index.php/negocio/apertura_caja/create">Abrir caja</a></li>
+                          <li><a href="index.php/negocio/apertura_caja/">Abrir caja</a></li>
                           <li><a href="index.php/ingresos/factura/">Factura</a></li>
                           <li><a href="index.php/ingresos/nota/">Nota crédito</a></li>
                           <li><a href="index.php">Abono</a></li>

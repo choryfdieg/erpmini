@@ -32,18 +32,29 @@ class ProductoFacade extends AbstractFacade{
         $querys[self::$PRODUCTOSPARAFACTURA] = "SELECT a.id as pojo_id, b.nombre as pojo_producto, 
                                                     c.descripcion as pojo_unidad_medida, a.valor_unitario as pojo_valor_unitario, 
                                                     d.nombre as pojo_impuesto,
-                                                    d.porcentaje_impuesto as pojo_porcentaje_impuesto
-                                                FROM tarifa a
-                                                inner join producto b on b.id = a.producto_id
-                                                inner join unidad_medida c on c.id = a.unidad_medida_id
-                                                inner join impuesto d on d.id = b.impuesto_id";
+                                                    d.porcentaje_impuesto as pojo_porcentaje_impuesto,
+                                                    (select sum(cantidad) from kardex k where k.sucursal_id = :sucursalId and k.tarifa_id = a.id) as pojo_existencias
+                                                  FROM tarifa a
+                                                  inner join producto b on b.id = a.producto_id
+                                                  inner join unidad_medida c on c.id = a.unidad_medida_id
+                                                  inner join impuesto d on d.id = b.impuesto_id
+                                                  inner join kardex e on e.tarifa_id = a.id
+                                                  where e.sucursal_id = :sucursalId";
+        
+        $querys[FacturaFacade::$DATOSCAJA] = FacturaFacade::getNamedQuery(FacturaFacade::$DATOSCAJA);
         
         return $querys[$namequery];
     }
 
     function getProductosParaFactura(){       
-       
-        $result = $this->runNamedQueryArray(self::$PRODUCTOSPARAFACTURA);
+        
+        $usuario = $_SESSION['login'];
+        
+        $datosCaja = $this->runNamedQueryArray(FacturaFacade::$DATOSCAJA, array(), array('usuario' => $usuario, 'tipo_factura_id' => 1));
+        
+        $sucursalId = $datosCaja[0]['sucursal_id'];
+        
+        $result = $this->runNamedQueryArray(self::$PRODUCTOSPARAFACTURA, array(), array('sucursalId' => $sucursalId));
         
         $productos = array();
         

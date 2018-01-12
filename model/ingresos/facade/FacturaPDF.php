@@ -10,7 +10,9 @@ class FacturaPDF extends FPDF {
     var $HREF;
     var $currentFontSize;
 
+    public $facturaCabecera;
     public $facturaProductos;
+    public $facturaFormasPago;
     
     function __construct($fontSize) {
         parent::__construct();
@@ -53,13 +55,15 @@ class FacturaPDF extends FPDF {
 
         foreach ($data as $rows) {
             
+            $index = 0;
+            
             foreach ($rows as $key => $row) {
 
-                $this->Cell(20, 5, $row, 'LR', 0, 'L', $fill);
+                $this->Cell($w[$index], 5, $row, 'LR', 0, 'L', $fill);
 
                 $this->SetFontSize($fontSize);
 
-                
+                $index +=1;
             }
 
             $this->Ln();
@@ -73,24 +77,52 @@ class FacturaPDF extends FPDF {
         
         ob_get_clean();
         
+        $tipoDocumento = 'Factura de venta';
+        
+        if($this->facturaCabecera['tipo_factura_id'] == 2){
+            $tipoDocumento = 'Nota credito';            
+        }
+        
         $this->AddPage();
         $this->SetFont('Arial','B',16);
-        $this->Cell(40,10,'Factura de venta');
         
-        $this->Ln();
+        $this->Cell(40, 10, $tipoDocumento);
+        
+        $this->Ln(15);
+
+        $this->Cell(40,10,'Fecha Factura: ' . $this->facturaCabecera['fecha_apertura'],0,1);
+        $this->Cell(40,10,'Numero Factura: ' . $this->facturaCabecera['prefijo'] . '-' . $this->facturaCabecera['numero'],0,1);
+        $this->Cell(40,10,$this->facturaCabecera['texto_numeracion'],0,1);
+        $this->Cell(40,10,$this->facturaCabecera['texto_resolucion'],0,1);
+        $this->Cell(40,10,'Cliente: ' . $this->facturaCabecera['nombre'] . '(' . $this->facturaCabecera['sigla'] . ':' . $this->facturaCabecera['documento'] . ')',0,1);
+        
+        $this->Ln(15);
         
         $header = array();
         
         $header[] = array('width' => 20, 'value' => 'producto');
-        $header[] = array('width' => 20, 'value' => 'unidad_medida');
+        $header[] = array('width' => 25, 'value' => 'unidad_medida');
         $header[] = array('width' => 20, 'value' => 'impuesto');
         $header[] = array('width' => 20, 'value' => 'cantidad');
         $header[] = array('width' => 20, 'value' => 'valor_unitario');
         $header[] = array('width' => 20, 'value' => 'descuento');
         $header[] = array('width' => 20, 'value' => 'valor_total');
-        $header[] = array('width' => 20, 'value' => 'valor_impuesto');
+        $header[] = array('width' => 25, 'value' => 'valor_impuesto');
         
         $this->FancyTable($header, $this->facturaProductos, 8);
+        
+        $this->Ln(15);
+        
+        $header = array();
+        
+        $header[] = array('width' => 20, 'value' => 'forma pago');
+        $header[] = array('width' => 20, 'value' => 'Valor');
+        
+        $this->FancyTable($header, $this->facturaFormasPago, 8);
+        
+        $this->Ln(15);
+        
+        $this->Cell(40,10,'Cajero: ' . $this->facturaCabecera['cajero'],0,1);
         
         $this->Output('F', 'factura.pdf');
         

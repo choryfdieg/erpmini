@@ -9,7 +9,7 @@
 * Description of Caja_sucursal
 *
 * @author chory
-* @date 2017-11-30 17:11:47
+* @date 2018-01-12 15:01:38
 */
 require_once 'model/Entity.php';
 
@@ -27,8 +27,6 @@ class Caja_sucursal extends Entity{
 
    /**
    *
-   * @id id
-   * @autoincrement true
    * @type int(11)
    * @length (11)
    */
@@ -50,52 +48,10 @@ class Caja_sucursal extends Entity{
 
    /**
    *
-   * @type varchar(45)
-   * @length (45)
-   */
-   public $prefijo;
-
-   /**
-   *
    * @type int(11)
    * @length (11)
    */
-   public $numero_inicial;
-
-   /**
-   *
-   * @type int(11)
-   * @length (11)
-   */
-   public $numero_final;
-
-   /**
-   *
-   * @type int(11)
-   * @length (11)
-   */
-   public $numero_actual;
-
-   /**
-   *
-   * @type varchar(500)
-   * @length (500)
-   */
-   public $texto_numeracion;
-
-   /**
-   *
-   * @type varchar(500)
-   * @length (500)
-   */
-   public $texto_resolucion;
-
-   /**
-   *
-   * @type varchar(45)
-   * @length (45)
-   */
-   public $a_usuario;
+   public $a_usuario_id;
 
    /**
    *
@@ -160,66 +116,12 @@ class Caja_sucursal extends Entity{
    }
 
 
-   public function setPrefijo($prefijo){
-      $this->prefijo = $prefijo;
+   public function setA_usuario_id($a_usuario_id){
+      $this->a_usuario_id = $a_usuario_id;
    }
 
-   public function getPrefijo(){
-       return $this->prefijo;
-   }
-
-
-   public function setNumero_inicial($numero_inicial){
-      $this->numero_inicial = $numero_inicial;
-   }
-
-   public function getNumero_inicial(){
-       return $this->numero_inicial;
-   }
-
-
-   public function setNumero_final($numero_final){
-      $this->numero_final = $numero_final;
-   }
-
-   public function getNumero_final(){
-       return $this->numero_final;
-   }
-
-
-   public function setNumero_actual($numero_actual){
-      $this->numero_actual = $numero_actual;
-   }
-
-   public function getNumero_actual(){
-       return $this->numero_actual;
-   }
-
-
-   public function setTexto_numeracion($texto_numeracion){
-      $this->texto_numeracion = $texto_numeracion;
-   }
-
-   public function getTexto_numeracion(){
-       return $this->texto_numeracion;
-   }
-
-
-   public function setTexto_resolucion($texto_resolucion){
-      $this->texto_resolucion = $texto_resolucion;
-   }
-
-   public function getTexto_resolucion(){
-       return $this->texto_resolucion;
-   }
-
-
-   public function setA_usuario($a_usuario){
-      $this->a_usuario = $a_usuario;
-   }
-
-   public function getA_usuario(){
-       return $this->a_usuario;
+   public function getA_usuario_id(){
+       return $this->a_usuario_id;
    }
 
 
