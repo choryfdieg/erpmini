@@ -46,13 +46,18 @@ class ProductoFacade extends AbstractFacade{
         return $querys[$namequery];
     }
 
-    function getProductosParaFactura(){       
+    function getProductosParaFactura($tipoFacturaId = '1'){       
         
         $usuario = $_SESSION['login'];
         
-        $datosCaja = $this->runNamedQueryArray(FacturaFacade::$DATOSCAJA, array(), array('usuario' => $usuario, 'tipo_factura_id' => 1));
+        $datosCaja = $this->runNamedQueryArray(FacturaFacade::$DATOSCAJA, array(), array('usuario' => $usuario, 'tipo_factura_id' => $tipoFacturaId));
         
-        $sucursalId = $datosCaja[0]['sucursal_id'];
+        // Carga por defecto los articulos de la sucursal principal si es una compra de articulos del inventario
+        if($tipoFacturaId == '3'){
+            $sucursalId = 1;
+        }else{
+            $sucursalId = $datosCaja[0]['sucursal_id'];
+        }
         
         $result = $this->runNamedQueryArray(self::$PRODUCTOSPARAFACTURA, array(), array('sucursalId' => $sucursalId));
         

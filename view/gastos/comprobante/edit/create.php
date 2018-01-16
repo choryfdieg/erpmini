@@ -1,21 +1,23 @@
-<h3><i class="fa fa-angle-right"></i> Nota crédito</h3>
+<h3><i class="fa fa-angle-right"></i> Factura a proveedores</h3>
 
 <form id="factura_form" class="form-horizontal style-form">
     
     <input id="factura_id" type="hidden" name="factura[id]" readonly="true" value="<?php echo $factura->id?>"/>
-    <input id="factura_original_id" type="hidden" name="factura[factura_id]" readonly="true" value="<?php echo $factura->factura_id?>"/>
     
     <div class="form-panel">
         
-        <h5 class="mb"><i class="fa fa-angle-right"></i> <?php echo ($factura->id > 0)? 'Editar nota crédito' : 'Crear nota crédito'?></h5>
+        <h5 class="mb"><i class="fa fa-angle-right"></i> <?php echo ($factura->id > 0)? 'Editar factura de venta' : 'Crear factura de venta'?></h5>
 
         <div class="row mt">
+            
             <div class="col-lg-6">
 
+
                 <div class="form-group">
-                    <label class="col-sm-2 col-sm-2 control-label">Numero de nota crédito</label>
+                    <label class="col-sm-2 col-sm-2 control-label">Numero de factura</label>
                     <div class="col-sm-10">
                         <input class="form-control" type="text" readonly="true" value="<?php echo $factura->prefijo . '-' . $factura->numero?>"/>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
 
@@ -31,6 +33,7 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
                 
@@ -53,20 +56,33 @@
             </div>
             
             <div class="col-lg-6">
+                
+                <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Factura del proveedor:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="factura[numero_factura]" value="<?php echo $factura->numero_factura?>"/>
+                        <p class="help-block">(Numero de la factura emitida por el proveedor)</p>
+                    </div>
+                </div>
+                
                 <div class="form-group">
                     <label class="col-sm-2 col-sm-2 control-label">Fecha de generacion</label>
-                    <div class='input-group date col-sm-10 input-date' id='datetimepicker1'>
-                        <input type='text' class="form-control" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>                                        
+                    <div class="col-sm-10">
+                        <div class='input-group date input-date' id='datetimepicker1'>
+                            <input type='text' class="form-control" value="<?php echo $factura->fechaGeneracion?>"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>                                        
+                    </div>
+                    <p class="help-block">&nbsp;</p>
                 </div>
                 
                 <div class="form-group">
                     <label class="col-sm-2 col-sm-2 control-label">Sucursal</label>
                     <div class="col-sm-10">
                         <span>Nombre de la sucursal</span>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
                 
@@ -74,6 +90,7 @@
                     <label class="col-sm-2 col-sm-2 control-label">Plazo</label>
                     <div class="col-sm-10">
                         <span>De contado</span>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
                 
@@ -81,6 +98,7 @@
                     <label class="col-sm-2 col-sm-2 control-label">Fecha de vencimiento</label>
                     <div class="col-sm-10">
                         <span>Fecha</span>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
                 
@@ -88,6 +106,7 @@
                     <label class="col-sm-2 col-sm-2 control-label">Asesor</label>
                     <div class="col-sm-10">
                         <span>Lista de asesores</span>
+                        <p class="help-block">&nbsp;</p>
                     </div>
                 </div>
             </div>
@@ -108,28 +127,31 @@
                             <th>Impuesto</th>
                             <th>Valor Unit.</th>
                             <th>Cantidad</th>
-                            <th>Descuento</th>
                             <th>Total</th>
-                            <th>Devolución Vlr.</th>
-                            <th>Devolución Cant.</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style="display: none">
                             <input type="hidden" class="item_id"/>
-                            <input type="hidden" class="factura_producto_id"/>
                             <input type="hidden" class="porcentaje_impuesto"/>
-                            <td><span value="" class="factura_producto"></span></td>
-                            <td><span value="" class="factura_impuesto"></span></td>
-                            <td><span value="" class="factura_valor_unitario"></span></td>
-                            <td><span value="" class="factura_cantidad"></span></td>
-                            <td><span value="" class="factura_descuento"></span></td>
-                            <td><span value="" class="factura_valor_total"></span></td>
-                            <td><input type="number" min="0" value="" class="valor_unitario"/></td>                            
-                            <td><input type="number" min="0" value="" class="cantidad_devolucion"/></td>                            
+                            <td>
+                                <select class="item">                        
+                                </select>
+                            </td>
+                            <td><span value="" class="impuesto"></span></td>
+                            <td><input type="number" min="1" value="" class="valor_unitario"/></td>
+                            <td><input type="number" min="1" value="" class="cantidad"/></td>
+                            <td><span class="total_row">0</span></td>
+                            <td>
+                                <button class="btn btn-danger btn-xs" onclick="removeItemTable(this)"><i class="fa fa-trash-o "></i></button>
+                            </td>
                         </tr>            
                     </tbody>
-                </table>                
+                </table>
+                <div class="col-sm-6 col-xs-6">
+                    <a href="javascript:;" onclick="addItemFacturaProductosTable()"><i class="fa fa-plus-circle"></i> Agregar item a la factura</a>
+                </div>                    
             </div>
         </div>
     </div>
@@ -158,7 +180,7 @@
                                 <select class="forma">                        
                                 </select>
                             </td>
-                            <td><input type="number" min="1" value="" class="valor"/></td>
+                            <td><input type="number" min="1" value="" class="valor text-right"/></td>
                             <td><input value="" class="referencia"/></td>
                             <td><input value="" class="voucher_tarjeta"/></td>
                             <td>
@@ -210,10 +232,6 @@
                             <td class="text-right" id="factura_subtotal" style="padding-right: 6%">0</td>
                         </tr>
                         <tr>
-                            <td class="text-right no-border"><strong>Descuentos</strong></td>
-                            <td class="text-right" id="factura_descuentos" style="padding-right: 6%">0</td>
-                        </tr>
-                        <tr>
                             <td class="text-right no-border">
                                 <div class="well well-small well-green"><strong>Total</strong></div>
                             </td>
@@ -222,16 +240,19 @@
                     </tbody>
                 </table>
                 
+                
             </div>
         </div>
-        
         <div class="row">
             <div style="float: right; margin-right: 1%;">
                 <div class="btn-group" style="padding-left: 10px">
-                    <a class="" href="index.php/ingresos/nota/" style="text-decoration: underline !important; font-weight: bold;">Volver</a>
+                    <a class="" href="index.php/gastos/Comprobante/" style="text-decoration: underline !important; font-weight: bold;">Volver</a>
                 </div>
                 <div class="btn-group" style="padding-left: 10px">
                     <a class="btn btn-default" href="javascript:;" onclick="descartarFactura()">Descartar</a>
+                </div>
+                <div class="btn-group" style="padding-left: 10px">
+                    <a class="btn btn-default" href="index.php/gastos/Comprobante/create">Crear nueva</a>
                 </div>
                 <div class="btn-group" style="padding-left: 10px">
                     <button style="width: 120px" type="button" class="btn btn-primary" onclick="save(false)">Guardar</button>
@@ -245,9 +266,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
-
-
     
 </form>

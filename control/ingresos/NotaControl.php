@@ -10,15 +10,6 @@
  * @author chory
  */
 require_once 'control/ingresos/FacturaCommonControl.php';
-require_once 'model/crm/facade/TerceroFacade.php';
-require_once 'model/ingresos/facade/Factura_productoFacade.php';
-require_once 'model/ingresos/facade/Factura_forma_pagoFacade.php';
-require_once 'model/ingresos/facade/Forma_pagoFacade.php';
-require_once 'model/negocio/facade/ProductoFacade.php';
-require_once 'model/negocio/facade/TarifaFacade.php';
-require_once 'model/ingresos/entity/Factura_producto.php';
-require_once 'model/ingresos/entity/Factura.php';
-require_once 'model/negocio/facade/Apertura_cajaFacade.php';
 
 class NotaControl extends FacturaCommonControl{
 
@@ -183,13 +174,7 @@ class NotaControl extends FacturaCommonControl{
         $factura_forma_pagoFacade->inactivarFormasDePagoFactura($factura_id, $formasDePagoActivas);
     }
 
-    private function tercerosForSelect() {
-        $terceroFacade = new TerceroFacade();
-        $entities = $terceroFacade->setParams(array('select' => array('id', 'documento', 'nombre')))->findEntities();
-        return $entities;
-    }
-
-    public function getFacturaProductos($request) {
+    public function getNotaProductos($request) {
 
         $factura_productoFacade = new Factura_productoFacade();
 
@@ -198,16 +183,7 @@ class NotaControl extends FacturaCommonControl{
         echo json_encode($facturaProductos);
     }
 
-    public function getFormasDePago() {
-
-        $forma_pagoFacade = new Forma_pagoFacade();
-
-        $formasDePago = $forma_pagoFacade->setParams(array('select' => array('id', 'nombre')))->findEntities();
-
-        echo json_encode($formasDePago);
-    }
-
-    public function getFacturaFormasDePago($request) {
+    public function getNotaFormasDePago($request) {
 
         $facturaFormasDePago = array();
 

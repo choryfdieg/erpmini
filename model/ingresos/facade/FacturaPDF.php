@@ -83,6 +83,10 @@ class FacturaPDF extends FPDF {
             $tipoDocumento = 'Nota credito';            
         }
         
+        if($this->facturaCabecera['tipo_factura_id'] == 3){
+            $tipoDocumento = 'Comprobante de pago';            
+        }
+        
         $this->AddPage();
         $this->SetFont('Arial','B',16);
         

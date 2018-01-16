@@ -2,17 +2,43 @@ var baseUrl = $('base').attr('href');
 
 $(document).ready(function(){    
     
-    loadNotasTable();
+    bootbox.dialog({
+            message: '<p><i class="fa fa-spin fa-spinner"></i>   Estamos cargando los datos de la factura...</p>',
+            closeButton: false,
+            className: 'top-30pe'
+        });
+    
+    $(document).ajaxStop(function(){
+        bootbox.hideAll();
+    });
     
     $('#datetimepicker1').datetimepicker({locale: 'es', format: 'YYYY/MM/DD'});
     
     $("#terceros_factura_select").select2({allowClear: true, width: '50%', 
         placeholder: "Seleccione el cliente"});
     
-    loadFacturaProductosTable();
+    loadProductosSelect();    
     loadFormasDePagoSelect();
     
-    $(".valor_unitario").on('change', function(){        
+    $(".cantidad").on('change', function(){
+        
+        var row = $(this).closest('tr');
+        
+        var valorUnitario = $(row).find('.valor_unitario');
+        
+        $(row).find('.total_row').html(formatMoneda($(valorUnitario).val() * $(this).val(), true, ''));
+    
+        uploadSubtotal();
+    });
+    
+    $(".valor_unitario").on('change', function(){
+        
+        var row = $(this).closest('tr');
+        
+        var cantidad = $(row).find('.cantidad');
+        
+        $(row).find('.total_row').html(formatMoneda($(this).val() * $(cantidad).val(), true, ''));
+    
         uploadSubtotal();
     });
     
@@ -22,138 +48,63 @@ $(document).ready(function(){
     
 });
 
-function loadNotasTable(){
-    var table = $('#notas_table').DataTable({
-        "ajax": baseUrl + 'api.php/ingresos/nota/notas',
-        "responsive": true,
-         "order": [[ 0, "desc" ]],
-        "language": {
-            "lengthMenu": "Mostrar _MENU_ registros por pagina",
-            "zeroRecords": "No se encontraron registros",
-            "info": "Mostrando la pagina _PAGE_ de _PAGES_",
-            "infoEmpty": "No hay registro para mostrar",
-            "infoFiltered": "(buscando entre _MAX_ registros)",
-            "sSearch": "Buscar:",
-            "oPaginate": {
-                "sFirst":    "Primero",
-                "sLast":     "Último",
-                "sNext":     "Siguiente",
-                "sPrevious": "Anterior",
-            }
-        },
-        "columnDefs": [{
-            "targets": [0],
-            "render": function(data){ 
-                        return '<a href="index.php/ingresos/nota/edit/id/' + data + '">' + data + '</a>';
-                      }
-              }]                      
-    });
-    
-    $("#reload_button").click(function(){
-        table.ajax.reload();
-    });
-}
-
 function uploadSubtotal(){
     
     var subtotal = 0;
     
-    var productosTr = $("#factura_producto_table tbody tr.factura_producto");
+    var productosTr = $("#factura_producto_table tbody tr");
     
     var impuestos = 0;
     var base = 0;
     var subtotal = 0;
-    var descuentos = 0;
-    var participacion = 0;
     
-    productosTr.each(function(i, e){
-        
-        var factura_producto = $(e).data("factura_producto");
+    $.each(productosTr, function(i, e){
         
         var porcentaje_impuesto = $(e).find('.porcentaje_impuesto').val();
         
         var valor_unitario = $(e).find('.valor_unitario').val();
-        
-        var cantidad = 1;
+        var cantidad = $(e).find('.cantidad').val();
         
         var impuesto = 0;
         
-        var porcentajeParticipacion = 0;
-        
-        // *** NOTA CREDITO TOTAL        
-        if(parseInt(factura_producto.valor_total) === parseInt(valor_unitario)){
-            valor_unitario = parseInt(factura_producto.valor_unitario);
-            cantidad = parseInt(factura_producto.cantidad);
-            impuesto = parseInt(factura_producto.valor_impuesto);
-            valorCalculo = parseInt(factura_producto.valor_unitario);
-        }else{
-            if(porcentaje_impuesto !== undefined && porcentaje_impuesto > 0){
-                
-                porcentajeParticipacion = (parseInt(valor_unitario) * parseInt(factura_producto.descuento)) / (parseInt(factura_producto.valor_unitario) * parseInt(factura_producto.cantidad));
-                
-                var valorCalculo = parseInt(valor_unitario) + porcentajeParticipacion;
-                
-                impuesto = Math.round((valorCalculo * parseInt(porcentaje_impuesto))/(100 + parseInt(porcentaje_impuesto)));                
-            }
+        if(porcentaje_impuesto !== undefined && porcentaje_impuesto > 0){
+            impuesto += Math.round((parseInt(valor_unitario) * parseInt(porcentaje_impuesto))/(100 + parseInt(porcentaje_impuesto)));
         }
         
-        base += (valorCalculo - (impuesto/cantidad)) * cantidad;        
+        base += (valor_unitario - impuesto) * cantidad;
         
         subtotal += valor_unitario * cantidad;
         
-        descuentos += porcentajeParticipacion;
-        
-        impuestos += impuesto;
+        impuestos += impuesto * cantidad;
         
     });
     
     $("#factura_base").html(formatMoneda(base, true, ''));
     $("#factura_impuestos").html(formatMoneda(impuestos, true, ''));
     $("#factura_subtotal").html(formatMoneda(subtotal, true, ''));
-    $("#factura_descuentos").html(formatMoneda(descuentos, true, ''));
-    $("#factura_total").html(formatMoneda(subtotal - descuentos, true, ''));
+    $("#factura_total").html(formatMoneda(subtotal, true, ''));    
     
     verificarTotalFormasPago();
 }
 
-function save(print){
+function setOptionData(){
     
-    var type = 'post';
+    var option = $(this).select2('data')[0].element;    
     
-    if(print){
-        if(validarFactura() === false){
-
-            return false;
-        }
-    }
+    var data = $(option).data('tarifa');
     
-    if($("#factura_id").val() !== ''){
-        type = 'put';
-    }
+    $($(this).closest("tr").find(".valor_unitario").get(0)).val(0);
     
-    $.ajax({url: baseUrl + 'api.php/ingresos/nota/save', 
-            type: type,
-            data: $("#factura_form").serialize(),
-        success: function (response) {
-            
-            var data = eval('('+response+')');
-            
-        }
-    }).done(function (response){
-        
-        var data = eval('('+response+')');
-        
-        if(print){
-            printDocument(data.id);
-        }
-    }).always(function(response){
-        
-        var data = eval('('+response+')');
-        
-        if(!print){
-            window.location.assign("index.php/ingresos/nota/edit/id/"+data.id);
-        }
-    });
+    $($(this).closest("tr").find(".impuesto").get(0)).html(data.impuesto);
+    
+    $($(this).closest("tr").find(".porcentaje_impuesto").get(0)).val(data.porcentaje_impuesto);
+    
+    $($(this).closest("tr").find(".cantidad").get(0)).val(1);
+    
+    $($(this).closest("tr").find(".total_row").get(0)).html(formatMoneda(data.valorUnitario, true, ''));
+    
+    uploadSubtotal();
+    
 }
 
 function validarFactura(){
@@ -177,6 +128,47 @@ function validarFactura(){
     return validacion;
 }
 
+function save(print){
+    
+    var type = 'post';
+    
+    if(print){
+        if(validarFactura() === false){
+
+            return false;
+        }
+    }
+    
+    if($("#factura_id").val() !== ''){
+        type = 'put';
+    }
+    
+    $.ajax({url: baseUrl + 'api.php/gastos/comprobante/save', 
+            type: type,
+            data: $("#factura_form").serialize(),
+        success: function (response) {
+            
+            var data = eval('('+response+')');
+            
+            
+        }
+    }).done(function (response){
+        
+        var data = eval('('+response+')');
+        
+        if(print){
+            printDocument(data.id);
+        }
+    }).always(function(response){
+        
+        var data = eval('('+response+')');
+        
+        if(!print){
+            window.location.assign("index.php/gastos/comprobante/edit/id/"+data.id);
+        }
+    });
+}
+
 function printDocument(facturaIdResponse){
     
     var facturaId = $("#factura_id").val();
@@ -185,7 +177,7 @@ function printDocument(facturaIdResponse){
         facturaId = facturaIdResponse;
     }
     
-    $.get(baseUrl + 'api.php/ingresos/factura/imprimirFactura', {'factura_id':facturaId}, 
+    $.get(baseUrl + 'api.php/gastos/comprobante/imprimirFactura', {'factura_id':facturaId}, 
         function(response){
             
             var data = $.parseJSON(response);
@@ -198,10 +190,51 @@ function printDocument(facturaIdResponse){
             document.body.removeChild(a);            
 
         }).done(function(){
-            window.location.assign("index.php/ingresos/nota/edit/id/"+facturaId);
+            window.location.assign("index.php/gastos/comprobante/edit/id/"+facturaId);
         }).fail(function(){
         });
     
+}
+
+function loadProductosSelect(){
+    
+    var tr = $("#factura_producto_table>tbody tr:first");
+    
+    var select = $(tr).find('.item');
+    
+    $.get(baseUrl + 'api.php/gastos/comprobante/productos', {}, 
+        function(response){
+            
+            var productos = eval('('+response+')');
+            
+            var option = $('<option>', {
+                    value: '',
+                    text: ''
+                });
+                
+            option.data('tarifa', {valorUnitario: '', impuesto: ''});
+                
+            $(select).append(option);
+            
+            $.each(productos, function(i, e){
+                
+                option = $('<option>', {
+                    value: e.id,
+                    text: '<div><span style="display:none;">'+e.id+'</span><strong>'+e.producto+' ('+e.unidad_medida+')</strong></div>'
+                });
+                
+                option.data('tarifa', {tarifaId: e.id, valorUnitario: 0, 
+                                        impuesto: e.impuesto, porcentaje_impuesto: e.porcentaje_impuesto,
+                                        existencias: e.existencias});
+                
+                $(select).append(option);
+            });
+            
+            
+        }).done(function(){
+            loadFacturaProductosTable();
+        }).fail(function(){
+        });
 }
 
 function removeItemTable(element){
@@ -209,11 +242,56 @@ function removeItemTable(element){
     uploadSubtotal();
 }
 
+function addItemFacturaProductosTable(){
+    
+    var tr = $("#factura_producto_table>tbody tr:first");
+    
+    var trCount = $("#factura_producto_table>tbody tr").length;
+    
+    var index = trCount - 1;
+    
+    var newTr = tr.clone(true);
+                
+    // *** input item_id
+    var itemId = $(newTr).find('.item_id').get(0);                
+    $(itemId).attr('name', 'factura_producto['+index+'][id]');
+    // *** end input
+    
+    // *** select productos
+    var item = $(newTr).find('.item').get(0);                
+
+    $(item).attr('name', 'factura_producto['+index+'][tarifa_id]');
+
+    $(item).select2({allowClear: true, width: '50%', 
+        placeholder: "Seleccione algun item",
+        templateResult: function (d) { return $(d.text); },
+        templateSelection: function (d) { return $(d.text); }
+    });
+
+    $(item).on("change", setOptionData);                
+    // *** end select
+    
+    // *** input valor unitario
+    var valorUnitario = $(newTr).find('.valor_unitario').get(0);
+    $(valorUnitario).attr('name', 'factura_producto['+index+'][valor_unitario]');
+    // *** end input
+
+    // *** input cantidad
+    var cantidad = $(newTr).find('.cantidad').get(0);                
+    $(cantidad).attr('name', 'factura_producto['+index+'][cantidad]');
+    // *** end input
+    // 
+
+    $(newTr).show();
+
+    $("#factura_producto_table").append(newTr);
+}
+
 function loadFacturaProductosTable(){
     
     var tr = $("#factura_producto_table>tbody tr:first");
     
-    $.get(baseUrl + 'api.php/ingresos/nota/notaProductos', {factura_original_id: $("#factura_original_id").val(), factura_id: $("#factura_id").val()}, 
+    $.get(baseUrl + 'api.php/gastos/comprobante/facturaProductos', {factura_id: $("#factura_id").val()}, 
         function(response){
             
             var facturaProductos = eval('('+response+')');
@@ -222,62 +300,58 @@ function loadFacturaProductosTable(){
     
             var index = trCount - 1;
             
-            var item = null;
-            var nota = null;
-            var factura = null;
-            
             $.each(facturaProductos, function(i, e){
                 
-                nota = e.nota_producto;
-                factura = e.factura_producto;
-                
                 var newTr = tr.clone(true);
-              
-                $(newTr).addClass('factura_producto');
                 
-                newTr.data("factura_producto", factura);
+                // *** input item_id
+                var itemId = $(newTr).find('.item_id').get(0);
+                $(itemId).attr('name', 'factura_producto['+index+'][id]');
+                $(itemId).val(e.id);
+                // *** end input
                 
-                // id del registro nota_producto
-                item = $(newTr).find('.item_id').get(0);
-                $(item).attr('name', 'factura_producto['+index+'][id]');
-                $(item).val(nota.id);
+                // *** select productos
+                var item = $(newTr).find('.item').get(0);                
                 
-                // valor de la devolucion
-                item = $(newTr).find('.valor_unitario').get(0);
-                $(item).attr('name', 'factura_producto['+index+'][valor_unitario]');
-                $(item).val(nota.valor_unitario);
+                $(item).attr('name', 'factura_producto['+index+'][tarifa_id]');
                 
-                // cantidad de la devolucion
-                item = $(newTr).find('.cantidad_devolucion').get(0);
-                $(item).attr('name', 'factura_producto['+index+'][cantidad_devolucion]');
-                $(item).attr('max', factura.cantidad);
-                $(item).val(nota.cantidad_devolucion);
+                $(item).select2({allowClear: true, width: '50%', 
+                    placeholder: "Seleccione algun item",
+                    templateResult: function (d) { return $(d.text); },
+                    templateSelection: function (d) { return $(d.text); }
+                });
                 
-                // id del registro padre factura_producto
-                item = $(newTr).find('.factura_producto_id').get(0);
-                $(item).attr('name', 'factura_producto['+index+'][factura_producto_id]');
-                $(item).val(factura.factura_producto_id);
+                $(item).select2('val', e.tarifa_id);
                 
-                item = $(newTr).find('.porcentaje_impuesto').get(0);
-                $(item).val(factura.porcentaje_impuesto);
+                $(item).on("change", setOptionData);                
+                // *** end select
                 
-                item = $(newTr).find('.factura_producto').get(0);
-                $(item).html(factura.producto);
+                // *** input valor unitario
+                var valorUnitario = $(newTr).find('.valor_unitario').get(0);
+                $(valorUnitario).attr('name', 'factura_producto['+index+'][valor_unitario]');
+                $(valorUnitario).val(e.valor_unitario);                
+                // *** end input
                 
-                item = $(newTr).find('.factura_impuesto').get(0);
-                $(item).html(factura.impuesto);
+                // *** input impuesto
+                var impuesto = $(newTr).find('.impuesto').get(0);
+                $(impuesto).html(e.impuesto);
+                // *** end input
+                // 
+                // *** input % impuesto
+                var porcentajeImpuesto = $(newTr).find('.porcentaje_impuesto').get(0);
+                $(porcentajeImpuesto).val(e.porcentaje_impuesto);
+                // *** end input
                 
-                item = $(newTr).find('.factura_valor_unitario').get(0);
-                $(item).html(factura.valor_unitario);
-                
-                item = $(newTr).find('.factura_descuento').get(0);
-                $(item).html(factura.descuento);
-                
-                item = $(newTr).find('.factura_cantidad').get(0);
-                $(item).html(factura.cantidad);
-                
-                item = $(newTr).find('.factura_valor_total').get(0);
-                $(item).html(factura.valor_total);
+                // *** input cantidad
+                var cantidad = $(newTr).find('.cantidad').get(0);                
+                $(cantidad).attr('name', 'factura_producto['+index+'][cantidad]');
+                $(cantidad).val(e.cantidad);
+                // *** end input
+                // 
+                // *** input total
+                var totalRow = $(newTr).find('.total_row').get(0);                
+                $(totalRow).html(formatMoneda(e.valor_total, true, ''));
+                // *** end input
                 
                 $(newTr).show();
                 
@@ -290,7 +364,8 @@ function loadFacturaProductosTable(){
             
         }).done(function(){
             uploadSubtotal();
-        }).always(function(){            
+        }).always(function(){
+            addItemFacturaProductosTable();
         }).fail(function(){
         });
 }
@@ -301,7 +376,7 @@ function loadFormasDePagoSelect(){
     
     var select = $(tr).find('.forma');
     
-    $.get(baseUrl + 'api.php/ingresos/nota/formasDePago', {}, 
+    $.get(baseUrl + 'api.php/gastos/comprobante/formasDePago', {}, 
         function(response){
             
             var productos = eval('('+response+')');
@@ -334,7 +409,7 @@ function loadFacturaFormaDePagoTable(){
     
     var tr = $("#factura_forma_pago_table>tbody tr:first");
     
-    $.get(baseUrl + 'api.php/ingresos/nota/notaFormasDePago', {factura_original_id: $("#factura_original_id").val(), factura_id: $("#factura_id").val()}, 
+    $.get(baseUrl + 'api.php/gastos/comprobante/facturaFormasDePago', {factura_id: $("#factura_id").val()}, 
         function(response){
             
             var facturaFormasDePago = eval('('+response+')');
@@ -394,7 +469,7 @@ function loadFacturaFormaDePagoTable(){
             
             
         }).always(function(){
-            addItemFacturaFormaDePagoTable();
+            addItemFacturaFormaDePagoTable();            
             verificarTotalFormasPago();
         }).fail(function(){
         });
@@ -409,9 +484,9 @@ function addItemFacturaFormaDePagoTable(){
     var index = trCount - 1;
     
     var newTr = tr.clone(true);
-    
-    $(newTr).addClass('factura_formas_pago');
                 
+    $(newTr).addClass('factura_formas_pago');            
+    
     // *** input forma_id
     var formaId = $(newTr).find('.forma_id').get(0);
     $(formaId).attr('name', 'factura_forma_pago['+index+'][id]');
@@ -487,4 +562,24 @@ function verificarTotalFormasPago(){
     
     return restante;
     
+}
+
+function descartarFactura(){
+    
+    var facturaId = $("#factura_id").val();
+    
+    if(facturaId === ''){
+        window.location.assign("index.php/gastos/comprobante/create/");
+        return false;
+    }
+    
+    $.ajax({url: baseUrl + 'api.php/gastos/comprobante/descartarFactura', 
+            type: 'put',
+            data: {'factura_id' : facturaId},
+        success: function (response) {
+            
+        }
+    }).done(function (response){        
+        window.location.assign("index.php/gastos/comprobante/create/");        
+    });
 }

@@ -69,6 +69,13 @@ class Factura extends Entity{
 
    /**
    *
+   * @type varchar(50)
+   * @length (50)
+   */
+   public $numero_factura;
+   
+   /**
+   *
    * @type varchar(2000)
    * @length (2000)
    */
@@ -177,6 +184,13 @@ class Factura extends Entity{
        return $this->factura_id;
    }
 
+   public function setNumero_factura($numero_factura){
+      $this->numero_factura = $numero_factura;
+   }
+
+   public function getNumero_factura(){
+       return $this->numero_factura;
+   }
 
    public function setObservacion($observacion){
       $this->observacion = $observacion;

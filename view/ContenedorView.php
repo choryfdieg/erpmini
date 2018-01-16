@@ -236,7 +236,10 @@
                       <a href="javascript:;" >
                           <i class="fa fa-cogs"></i>
                           <span>Gastos</span>
-                      </a>                      
+                      </a> 
+                      <ul class="sub">
+                          <li><a href="index.php/gastos/comprobante/">Factura a proveedores</a></li>
+                      </ul>
                   </li>
                   <li class="sub-menu">
                       <a href="javascript:;" >

@@ -18,6 +18,7 @@ class FacturaFacade extends AbstractFacade{
 
     public static $TIPO_FACTURA = 1;
     public static $TIPO_NOTA = 2;
+    public static $TIPO_COMPROBANTE_EGRESO = 3;
     public static $ESTADOACTIVO = 1;
     public static $ESTADOINACTIVO = 2;
     

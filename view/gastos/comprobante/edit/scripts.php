@@ -1,0 +1,1 @@
+<script src="resources/js/gastos/comprobante/create.js"></script>
